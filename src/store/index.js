@@ -4,7 +4,12 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    user: null,
+  },
+  getters: {
+    jwt: (state) => (state.user ? state.user.jwt : null),
+  },
   mutations: {},
   actions: {},
   modules: {},
