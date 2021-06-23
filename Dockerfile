@@ -1,4 +1,3 @@
-  
 FROM node:carbon
 
 COPY ./docker/entrypoint.sh /entrypoint/
