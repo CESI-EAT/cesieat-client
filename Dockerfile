@@ -1,5 +1,5 @@
 FROM node
-WORKDIR /app
+WORKDIR /api
 COPY package*.json ./
 RUN  npm install
 COPY . .
