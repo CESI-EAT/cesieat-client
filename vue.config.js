@@ -8,6 +8,6 @@ module.exports = {
       cert: fs.readFileSync('./src/assets/certs/cert1.pem'),
     },
     disableHostCheck: true,
-    public: 'https://localhost:9377/',
+    port: 9377,
   },
 }
