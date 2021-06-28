@@ -7,7 +7,7 @@ const baseURL = 'http://localhost:3000/'
  * Extracts and returns the JWT of the stored user.
  * @returns The stored user's JWT.
  */
-const getAuthorization = () => ({
+export const getAuthorization = () => ({
   Authorization: `Bearer ${store.getters.jwt}`,
 })
 

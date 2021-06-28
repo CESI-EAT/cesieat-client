@@ -5,12 +5,25 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    status: '',
+    token: localStorage.getItem('token') || '',
+    user: {},
   },
   getters: {
-    jwt: (state) => (state.user ? state.user.jwt : null),
+    jwt: (state) => state.token || null,
+    isLoggedIn: (state) => !!state.token,
+    authStatus: (state) => state.status,
   },
-  mutations: {},
+  mutations: {
+    auth_success(state, authRes) {
+      state.user = authRes.user
+      state.token = authRes.token
+    },
+    logout(state) {
+      state.user = null
+      state.token = null
+    },
+  },
   actions: {},
   modules: {},
 })

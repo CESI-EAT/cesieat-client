@@ -14,7 +14,11 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text color="base">
+      <v-btn v-if="$store.getters.isLoggedIn" @click="logout" text color="base">
+        <v-icon class="mr-2">mdi-logout</v-icon>
+        <span>Déconnexion</span>
+      </v-btn>
+      <v-btn v-else text @click="goToLoginPage" color="base">
         <v-icon class="mr-2">mdi-login</v-icon>
         <span>Connexion</span>
       </v-btn>
@@ -33,5 +37,18 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    goToLoginPage() {
+      this.$router.push('/login')
+    },
+    logout() {
+      this.$store.commit('logout')
+      localStorage.removeItem('token')
+      this.goToHome()
+    },
+    goToHome() {
+      this.$router.push('/')
+    },
+  },
 }
 </script>
