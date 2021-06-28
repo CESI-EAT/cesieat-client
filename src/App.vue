@@ -6,9 +6,9 @@
           alt="CESI'EAT Logo"
           class="shrink mr-2"
           contain
-          src="@/assets/cesieat.jpg"
+          src="@/assets/cesieat_white_horizontal.png"
           height="60"
-          width="60"
+          position="left"
         />
       </div>
 

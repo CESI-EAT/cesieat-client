@@ -8,12 +8,12 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#FFCD38',
+        primary: '#FF912B',
         secondary: '#4A4A4A',
         tertiary: '#6C6C6C',
         base: '#FFFFFF',
         layer: '#DEDDD7',
-        accent: '#FCDD38',
+        accent: '#FFCD38',
         error: '#FF5252',
         info: '#2196F3',
         success: '#4CAF50',
