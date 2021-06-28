@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="800" tile>
     <div class="pa-5">
-      <v-form ref="form" v-model="valid" lazy-validation v-if="status === 0">
+      <v-form ref="form" lazy-validation v-if="status === 0">
         <span class="title"> Connectez-vous : </span>
         <v-spacer></v-spacer>
         <form @submit.prevent="submit">
@@ -15,7 +15,6 @@
 
           <v-text-field
             v-model="password"
-            :value="myPass"
             :counter="20"
             :rules="passwordRules"
             label="Mot de passe"
@@ -25,12 +24,7 @@
           ></v-text-field>
 
           <div class="pt-5">
-            <v-btn
-              class="mr-2"
-              type="submit"
-              :disabled="invalid"
-              color="primary"
-            >
+            <v-btn class="mr-2" type="submit" color="primary">
               Connexion
             </v-btn>
             <v-btn class="ma-2" text color="primary" @click="status = -1">
@@ -40,7 +34,7 @@
         </form>
       </v-form>
 
-      <v-form ref="form" v-model="valid" lazy-validation v-if="status === -1">
+      <v-form ref="form" lazy-validation v-if="status === -1">
         <div>
           <v-btn color="primary" outlined @click="status = 0" class="pl-2">
             <v-icon class="mr-2">mdi-chevron-left</v-icon>
@@ -96,7 +90,6 @@ export default {
         0
       )
       if (res && res.data && res.data.success) {
-        console.log(res.data)
         const token = res.data.token
         localStorage.setItem('token', token)
         this.$store.commit('auth_success', res.data)

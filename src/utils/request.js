@@ -29,7 +29,8 @@ export const request = async (
   headers = {},
   params = {},
   data = {},
-  timeout = 0
+  timeout = 0,
+  withCredentials = true
 ) => {
   return axios({
     url,
@@ -39,5 +40,6 @@ export const request = async (
     params,
     data,
     timeout,
+    withCredentials,
   })
 }

@@ -15,7 +15,7 @@
             placeholder="Rechercher un restaurant..."
             @keydown.enter="search()"
           />
-          <v-btn flat color="primary" height="56" @click="search()">
+          <v-btn flat="true" color="primary" height="56" @click="search()">
             <v-icon large>mdi-magnify</v-icon>
           </v-btn>
         </div>
@@ -23,7 +23,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { themeMixin } from '@/mixins/themeMixin'
 

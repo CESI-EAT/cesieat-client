@@ -9,5 +9,6 @@ module.exports = {
     },
     disableHostCheck: true,
     port: 9377,
+    hotOnly: false,
   },
 }
