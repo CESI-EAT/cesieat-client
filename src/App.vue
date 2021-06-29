@@ -44,6 +44,28 @@
       <v-main>
         <router-view />
       </v-main>
+      <v-footer color="primary lighten-1" padless>
+        <v-row justify="center" no-gutters>
+          <v-btn color="white" text rounded class="my-1" @click="goToHomePage">
+            Home
+          </v-btn>
+          <v-btn
+            color="white"
+            text
+            rounded
+            class="my-1"
+            @click="goToConditionsPage"
+          >
+            Mentions légales
+          </v-btn>
+          <v-btn color="white" text rounded class="my-1" @click="goToRGPDPage">
+            RGPD
+          </v-btn>
+          <v-col class="primary py-1 text-center white--text" cols="12">
+            {{ new Date().getFullYear() }} — <strong>CESI'EAT</strong>
+          </v-col>
+        </v-row>
+      </v-footer>
     </v-app>
   </div>
 </template>
