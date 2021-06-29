@@ -7,7 +7,7 @@ const baseURL = 'http://localhost:3000/'
  * Extracts and returns the JWT of the stored user.
  * @returns The stored user's JWT.
  */
-const getAuthorization = () => ({
+export const getAuthorization = () => ({
   Authorization: `Bearer ${store.getters.jwt}`,
 })
 
@@ -29,7 +29,8 @@ export const request = async (
   headers = {},
   params = {},
   data = {},
-  timeout = 0
+  timeout = 0,
+  withCredentials = true
 ) => {
   return axios({
     url,
@@ -39,5 +40,6 @@ export const request = async (
     params,
     data,
     timeout,
+    withCredentials,
   })
 }
