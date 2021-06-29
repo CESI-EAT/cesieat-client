@@ -7,7 +7,6 @@
         <form @submit.prevent="submit">
           <v-text-field
             v-model="email"
-            :counter="50"
             :rules="emailRules"
             label="Email"
             required
@@ -15,14 +14,27 @@
 
           <v-text-field
             v-model="password"
-            :counter="20"
             :rules="passwordRules"
             label="Mot de passe"
             :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="() => (value = !value)"
             :type="value ? 'password' : 'text'"
           ></v-text-field>
-
+          <v-alert v-if="this.errors" type="error" class="mt-6">
+            Votre identifiant ou votre mot de passe est incorrect. Veuillez
+            revérifier vos informations.</v-alert
+          >
+          <div class="pt-2">
+            <span class="subtitle-2"> Vous n'avez pas de compte ? </span>
+            <v-btn
+              text
+              class="subtitle-2 pl-1"
+              color="primary"
+              @click="goToRegister"
+            >
+              S'inscrire
+            </v-btn>
+          </div>
           <div class="pt-5">
             <v-btn class="mr-2" type="submit" color="primary">
               Connexion
@@ -50,7 +62,6 @@
         </div>
         <v-text-field
           v-model="email"
-          :counter="50"
           :rules="emailRules"
           label="Email"
           required
@@ -79,6 +90,9 @@ export default {
     goToHome() {
       this.$router.push('/')
     },
+    goToRegister() {
+      this.$router.push('/register')
+    },
     async submit() {
       const res = await this.request(
         false,
@@ -88,16 +102,23 @@ export default {
         {},
         { email: this.email, password: this.password },
         0
-      )
+      ).catch((error) => this.wrongCredentials(error))
       if (res && res.data && res.data.success) {
         const { data: user } = await this.request(false, 'me', 'get')
         this.$store.commit('set_user', user)
         this.goToHome()
+      } else {
+        console.log('mauvais mdp')
       }
+    },
+    wrongCredentials() {
+      this.errors = true
+      console
     },
   },
   data: () => ({
     email: '',
+    errors: false,
     emailRules: [
       (v) => !!v || 'Le mail est requis',
       (v) =>
