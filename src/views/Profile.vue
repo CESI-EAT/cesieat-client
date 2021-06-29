@@ -130,7 +130,7 @@ import { requestMixin } from '@/mixins/requestMixin'
 export default {
   name: 'Profile',
   mixins: [requestMixin],
-  data: function() {
+  data: function () {
     return {
       user: {
         firstname: '',
@@ -141,7 +141,7 @@ export default {
       },
     }
   },
-  mounted: async function() {
+  mounted: async function () {
     const { data } = await this.request(false, 'me', 'get')
     this.user = data
   },

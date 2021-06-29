@@ -11,20 +11,22 @@
     <v-app v-if="!isFetchingUser">
       <v-app-bar app color="primary">
         <div class="d-flex justify-start">
-          <v-img
-            alt="CESI'EAT Logo"
-            class="shrink mr-2"
-            contain
-            src="@/assets/cesieat_white_horizontal.png"
-            height="60"
-            position="left"
-          />
+          <v-btn text color="transparent" @click="goToHome">
+            <v-img
+              alt="CESI'EAT Logo"
+              class="shrink mr-2"
+              contain
+              src="@/assets/cesieat_white_horizontal.png"
+              height="60"
+              position="left"
+            />
+          </v-btn>
         </div>
 
         <v-spacer></v-spacer>
         <v-btn v-if="$store.getters.isLoggedIn" to="/profile" text color="base">
           <v-icon class="mr-2">mdi-account</v-icon>
-          <span>Profile</span>
+          <span>Profil</span>
         </v-btn>
         <v-btn
           v-if="$store.getters.isLoggedIn"
@@ -41,12 +43,12 @@
         </v-btn>
       </v-app-bar>
 
-      <v-main>
+      <v-main style="min-height: 100vh">
         <router-view />
       </v-main>
       <v-footer color="primary lighten-1" padless>
         <v-row justify="center" no-gutters>
-          <v-btn color="white" text rounded class="my-1" @click="goToHomePage">
+          <v-btn color="white" text rounded class="my-1" @click="goToHome">
             Home
           </v-btn>
           <v-btn
@@ -105,6 +107,12 @@ export default {
     },
     goToHome() {
       this.$router.push('/')
+    },
+    goToConditionsPage() {
+      this.$router.push('/conditions')
+    },
+    goToRGPDPage() {
+      this.$router.push('/rgpd')
     },
   },
 }
