@@ -110,15 +110,43 @@
 </template>
 
 <script>
+import { requestMixin } from '@/mixins/requestMixin'
 export default {
   name: 'Register',
+  mixins: [requestMixin],
 
   methods: {
     reset() {
       this.$refs.form.reset()
     },
-    submit() {
-      this.$refs.form.validate()
+    goToHome() {
+      this.$router.push('/')
+    },
+    async submit() {
+      let res = null
+      res = await this.request(
+        false,
+        'register',
+        'post',
+        {},
+        {},
+        {
+          email: this.email,
+          lastname: this.surname,
+          firstname: this.name,
+          address: this.address,
+          password: this.password,
+          phone_number: this.phoneNumber,
+          role_id: 1,
+        },
+        0
+      ).catch((error) => console.log('error :' + error))
+      console.log(res)
+      if (res && res.data && res.data.success) {
+        const { data: user } = await this.request(false, 'me', 'get')
+        this.$store.commit('set_user', user)
+        this.goToHome()
+      }
     },
   },
 
