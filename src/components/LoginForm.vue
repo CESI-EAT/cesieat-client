@@ -90,9 +90,8 @@ export default {
         0
       )
       if (res && res.data && res.data.success) {
-        const token = res.data.token
-        localStorage.setItem('token', token)
-        this.$store.commit('auth_success', res.data)
+        const { data: user } = await this.request(false, 'me', 'get')
+        this.$store.commit('set_user', user)
         this.goToHome()
       }
     },

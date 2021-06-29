@@ -18,7 +18,7 @@ export default new Vuex.Store({
       state.user = user
     },
     auth_success(state, authRes) {
-      state.user = authRes.user
+      state.isLoggedIn = authRes.user
     },
     logout(state) {
       state.user = null
