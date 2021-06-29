@@ -137,7 +137,7 @@ export default {
           address: this.address,
           password: this.password,
           phone_number: this.phoneNumber,
-          role_id: 1,
+          roleId: 1,
         },
         0
       ).catch((error) => console.log('error :' + error))

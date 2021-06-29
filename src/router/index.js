@@ -48,6 +48,12 @@ const routes = [
       import(/* webpackChunkName: "about" */ '../views/Rgpd.vue'),
   },
   {
+    path: '/follow',
+    name: 'Follow',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Follow.vue'),
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () =>
