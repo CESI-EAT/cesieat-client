@@ -52,6 +52,12 @@ const routes = [
     },
   },
   {
+    path: '/stripe',
+    name: 'Stripe',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Stripe.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     component: () =>
