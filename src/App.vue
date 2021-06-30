@@ -99,7 +99,7 @@ export default {
       this.$router.push('/conditions')
     },
     goToRGPDPage() {
-      this.$router.push('/rgpd')
+      this.$router.push('/gdpr')
     },
   },
 }
