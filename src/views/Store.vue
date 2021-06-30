@@ -56,6 +56,7 @@
 import { request } from '@/utils/request'
 import Product from '@/components/store/Product'
 import Cart from '@/components/store/Cart'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Store',
@@ -70,21 +71,21 @@ export default {
     },
   },
   async mounted() {
-    const res = await request.get(`/stores/${this.id}`)
-    this.store = res.data
+    this.findStore(this.id)
   },
   data() {
     return {
-      store: null,
       cart: [],
     }
   },
   computed: {
+    ...mapGetters('stores', ['store', 'products', 'categories', 'isLoading']),
     products() {
       return this.store.products
     },
   },
   methods: {
+    ...mapActions('stores', ['findStore']),
     addProduct(id) {
       // looks in the cart if the product has already been added
       const referenceIndex = this.getProductIndex(id)

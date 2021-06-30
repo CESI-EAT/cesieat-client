@@ -3,6 +3,7 @@ import { request } from '../../utils/request'
 // initial state
 const state = () => ({
   stores: [],
+  store: null,
   isLoading: false,
   isUpdating: false,
   isCreating: false,
@@ -11,6 +12,9 @@ const state = () => ({
 // getters
 const getters = {
   stores: (state) => state.stores,
+  store: (state) => state.store,
+  products: (state) => state.store.products,
+  categories: (state) => state.store.categories,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
   isCreating: (state) => state.isCreating,
@@ -33,7 +37,7 @@ const actions = {
     commit('setStoresIsLoading', true)
     try {
       const { data: store } = await request.get(`stores/${storeId}`)
-      commit('setCurrentStore', store)
+      commit('setStore', store)
     } catch (err) {
       console.log(err)
     }

@@ -13,7 +13,9 @@ const state = () => ({
 const getters = {
   orders: (state) => state.orders,
   order: (state) => state.order,
-  loading: (state) => state.status === 'loading',
+  isLoading: (state) => state.isLoading,
+  isUpdating: (state) => state.isUpdating,
+  isCreating: (state) => state.isCreating,
 }
 
 // actions

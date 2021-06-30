@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay v-if="status === 'loading' && user === null">
+    <v-overlay v-if="isLoading">
       <v-progress-circular
         :size="70"
         :width="7"
@@ -68,17 +68,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { request } from '@/utils/request'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
   computed: {
-    ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState({
-      status: (state) => state.auth.status,
-      user: (state) => state.auth.user,
-    }),
+    ...mapGetters('auth', ['isLoggedIn', 'user']),
   },
   created() {
     this.$store.dispatch('auth/getUser')
