@@ -70,7 +70,7 @@
               </v-dialog>
             </v-col>
           </v-row>
-          <v-row v-if="storesLoading">
+          <v-row v-if="loading">
             <v-col sm="6" md="4" v-for="i in 12" :key="`product_${i}`">
               <v-card>
                 <v-skeleton-loader
@@ -106,7 +106,7 @@
 <script>
 import StoreCard from '@/components/stores/StoreCard'
 import StoresFilter from '@/components/stores/StoresFilter'
-import { request } from '@/utils/request'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Stores',
@@ -122,8 +122,6 @@ export default {
   },
   data() {
     return {
-      stores: [],
-      storesLoading: false,
       searchString: '',
       message: null,
       filter: {
@@ -137,6 +135,7 @@ export default {
     this.getStores()
   },
   computed: {
+    ...mapGetters('stores', ['stores', 'loading']),
     search() {
       if (this.searchString && this.searchString.length > 0) {
         return this.searchString
@@ -153,6 +152,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('stores', ['findAll']),
     handlePriceRangeInput(value) {
       this.priceRange = value
       this.getStores()
@@ -165,19 +165,12 @@ export default {
       this.getStores()
     },
     async getStores() {
-      if (!this.storesLoading) {
-        this.storesLoading = true
+      if (!this.loading) {
         const params = {
           search: this.search,
           'price-range': this.filter.priceRange,
         }
-        const res = await request.get('/stores', { params: params })
-        if (res && res.data && Array.isArray(res.data)) {
-          this.stores = res.data
-        } else {
-          this.message = 'Aucun résultat trouvé.'
-        }
-        this.storesLoading = false
+        this.findAll(params)
       }
     },
   },

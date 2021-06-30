@@ -55,6 +55,16 @@ const actions = {
       commit('setStatus', 'failed')
     }
   },
+  async register({ commit }, payload) {
+    commit('setStatus', 'loading')
+    try {
+      const { data } = request.post(`/register`, payload)
+      commit('setUser', data.user)
+      commit('setStatus', 'success')
+    } catch (err) {
+      commit('setStatus', 'failed')
+    }
+  },
 }
 
 // mutations
