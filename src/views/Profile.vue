@@ -15,7 +15,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Nom"
-                    v-model="currentUser.lastname"
+                    v-model="user.lastname"
                     required
                     outlined
                   ></v-text-field>
@@ -23,7 +23,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Prénom"
-                    v-model="currentUser.firstname"
+                    v-model="user.firstname"
                     required
                     outlined
                   ></v-text-field>
@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Email"
-                    v-model="currentUser.email"
+                    v-model="user.email"
                     required
                     outlined
                   ></v-text-field>
@@ -41,7 +41,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Numéro de téléphone"
-                    v-model="currentUser.phoneNum"
+                    v-model="user.phoneNum"
                     required
                     outlined
                   ></v-text-field>
@@ -51,7 +51,7 @@
                 <div class="col-12">
                   <v-text-field
                     label="Adresse"
-                    v-model="currentUser.address"
+                    v-model="user.address"
                     required
                     outlined
                   ></v-text-field>
@@ -108,7 +108,7 @@
           <v-divider class="pb-4"></v-divider>
           <v-spacer></v-spacer>
 
-          <form @submit.prevent="submit">
+          <form @submit.prevent="submitNewPassword">
             <span
               >Pour modifier votre mot de passe, veuillez saisir votre mot de
               passe actuel pour confirmer votre identité.</span
@@ -117,15 +117,25 @@
               <div class="col-6">
                 <v-text-field
                   label="Mot de passe actuel"
+                  v-model="currentPassword"
                   required
                   outlined
+                  :append-icon="showCurrentPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="
+                    () => (showCurrentPassword = !showCurrentPassword)
+                  "
+                  :type="showCurrentPassword ? 'password' : 'text'"
                 ></v-text-field>
               </div>
               <div class="col-6">
                 <v-text-field
                   label="Nouveau mot de passe"
+                  v-model="newPassword"
                   required
                   outlined
+                  :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="() => (showNewPassword = !showNewPassword)"
+                  :type="showNewPassword ? 'password' : 'text'"
                 ></v-text-field>
               </div>
             </div>
@@ -152,18 +162,27 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Profile',
   data: () => ({
-    currentUser: {},
+    currentPassword: '',
+    newPassword: '',
+    showNewPassword: true,
+    showCurrentPassword: true,
   }),
-  created() {
-    this.currentUser = { ...this.$store.state.auth.user }
-  },
   computed: {
-    ...mapState('auth', ['status', 'user']),
+    ...mapState('auth', {
+      status: (state) => state.status,
+      user: (state) => ({ ...state.user }),
+    }),
   },
   methods: {
-    ...mapActions('auth', ['updateProfile']),
-    submit(ev) {
-      this.updateProfile(this.currentUser)
+    ...mapActions('auth', ['updateProfile', 'changePassword']),
+    submit() {
+      this.updateProfile(this.user)
+    },
+    submitNewPassword() {
+      this.changePassword({
+        currentPassword: this.currentPassword,
+        newPassword: this.newPassword,
+      })
     },
     reset() {
       this.$router.push('/login')

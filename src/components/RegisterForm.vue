@@ -141,7 +141,7 @@ export default {
       console.log(res)
       if (res && res.data && res.data.success) {
         const { data: user } = await this.request(false, 'me', 'get')
-        this.$store.commit('set_user', user)
+        this.$store.commit('setUser', user)
         this.goToHome()
       }
     },
