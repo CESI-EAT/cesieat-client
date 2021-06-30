@@ -38,7 +38,7 @@ const actions = {
     commit('setStatus', 'loading')
     const userId = state.user.id
     try {
-      const { data } = await request.patch(`/users/${userId}`, payload)
+      const { data } = await request.patch(`users/${userId}`, payload)
       commit('setUser', data.user)
       commit('setStatus', 'success')
     } catch (err) {
@@ -49,7 +49,7 @@ const actions = {
   async changePassword({ commit }, payload) {
     commit('setStatus', 'loading')
     try {
-      await request.post(`/change-password`, payload)
+      await request.post(`change-password`, payload)
       commit('setStatus', 'success')
     } catch (err) {
       commit('setStatus', 'failed')
@@ -58,7 +58,7 @@ const actions = {
   async register({ commit }, payload) {
     commit('setStatus', 'loading')
     try {
-      const { data } = request.post(`/register`, payload)
+      const { data } = request.post(`register`, payload)
       commit('setUser', data.user)
       commit('setStatus', 'success')
     } catch (err) {

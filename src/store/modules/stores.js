@@ -2,38 +2,61 @@ import { request } from '../../utils/request'
 
 // initial state
 const state = () => ({
-  all: [],
-  status: null,
+  stores: [],
+  isLoading: false,
+  isUpdating: false,
+  isCreating: false,
 })
 
 // getters
 const getters = {
-  stores: (state) => state.all,
-  loading: (state) => state.status === 'loading',
+  stores: (state) => state.stores,
+  isLoading: (state) => state.isLoading,
+  isUpdating: (state) => state.isUpdating,
+  isCreating: (state) => state.isCreating,
 }
 
 // actions
 const actions = {
   async findAll({ commit }, params) {
-    commit('setStatus', 'loading')
+    commit('setStoresIsLoading', true)
     try {
       const { data: stores } = await request.get('stores', { params })
       commit('setStores', stores)
-      commit('setStatus', 'success')
     } catch (err) {
       console.log(err)
-      commit('setStatus', 'failed')
     }
+    commit('setStoresIsLoading', false)
+  },
+
+  async findStore({ commit }, storeId) {
+    commit('setStoresIsLoading', true)
+    try {
+      const { data: store } = await request.get(`stores/${storeId}`)
+      commit('setCurrentStore', store)
+    } catch (err) {
+      console.log(err)
+    }
+    commit('setStoresIsLoading', false)
   },
 }
 
 // mutations
 const mutations = {
   setStores(state, stores) {
-    state.all = stores
+    state.stores = stores
   },
-  setStatus(state, status) {
-    state.status = status
+  setStore(state, store) {
+    state.store = store
+  },
+  setStoresIsLoading(state, isLoading) {
+    state.isLoading = isLoading
+  },
+  setStoresIsCreating(state, isCreating) {
+    state.isCreating = isCreating
+  },
+  setStoresIsUpdating(state, isUpdating) {
+    state.isUpdating = isUpdating
   },
 }
 
