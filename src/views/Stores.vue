@@ -6,24 +6,18 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3">
+      <v-col v-if="mdAndUp" md="3">
         <v-card>
           <v-card-title>Filtrer par...</v-card-title>
           <v-card-text>
-            <h5>Gamme de prix</h5>
-            <v-rating
-              color="primary"
-              empty-icon="mdi-circle-medium"
-              full-icon="mdi-currency-eur"
-              length="4"
-              hover
-              :value="priceRange"
-              @change="getStores()"
+            <stores-filter
+              :filter="filter"
+              @price-range-input="handlePriceRangeInput($event)"
             />
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="9">
+      <v-col sm="12" md="9">
         <v-container class="pa-0" fluid>
           <v-row>
             <v-col>
@@ -41,10 +35,43 @@
                   <v-icon large>mdi-magnify</v-icon>
                 </v-btn>
               </div>
+              <v-dialog v-if="smAndDown" v-model="showDialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    block
+                    color="primary"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="filterOverlay = true"
+                  >
+                    <v-icon class="mr-2">mdi-filter</v-icon>
+                    Filtrer les résultats
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>Filtrer par...</v-card-title>
+                  <v-card-text>
+                    <stores-filter
+                      ref="mobileFilter"
+                      :filter="filter"
+                      @submit="handleFilterSubmit($event)"
+                    />
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      block
+                      @click="$refs.mobileFilter.submit()"
+                    >
+                      Valider</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </v-col>
           </v-row>
           <v-row v-if="storesLoading">
-            <v-col cols="3" v-for="i in 12" :key="`product_${i}`">
+            <v-col sm="6" md="4" v-for="i in 12" :key="`product_${i}`">
               <v-card>
                 <v-skeleton-loader
                   type="image, card-heading, list-item-two-line, actions"
@@ -53,9 +80,13 @@
               </v-card>
             </v-col>
           </v-row>
-
           <v-row v-else-if="stores && stores.length > 0">
-            <v-col cols="4" v-for="store in stores" :key="`store_${store._id}`">
+            <v-col
+              sm="6"
+              md="4"
+              v-for="store in stores"
+              :key="`store_${store._id}`"
+            >
               <store-card :store="store" />
             </v-col>
           </v-row>
@@ -74,15 +105,15 @@
 
 <script>
 import StoreCard from '@/components/stores/StoreCard'
-import { requestMixin } from '@/mixins/requestMixin'
-import { request } from '../utils/request'
+import StoresFilter from '@/components/stores/StoresFilter'
+import { request } from '@/utils/request'
 
 export default {
   name: 'Stores',
   components: {
     StoreCard,
+    StoresFilter,
   },
-  mixins: [requestMixin],
   props: {
     searchProp: {
       type: String,
@@ -92,10 +123,13 @@ export default {
   data() {
     return {
       stores: [],
-      storesLoading: true,
+      storesLoading: false,
       searchString: '',
       message: null,
-      priceRange: 2,
+      filter: {
+        priceRange: 4,
+      },
+      showDialog: false,
     }
   },
   mounted() {
@@ -111,14 +145,31 @@ export default {
       }
       return null
     },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp
+    },
+    smAndDown() {
+      return this.$vuetify.breakpoint.smAndDown
+    },
   },
   methods: {
+    handlePriceRangeInput(value) {
+      this.priceRange = value
+      this.getStores()
+    },
+    // for mobile filters, a submit action is needed
+    handleFilterSubmit(filter) {
+      this.filter = filter
+      console.log(this.filter)
+      this.showDialog = false
+      this.getStores()
+    },
     async getStores() {
-      if (this.storesLoading) {
+      if (!this.storesLoading) {
         this.storesLoading = true
         const params = {
           search: this.search,
-          'price-range': this.priceRange,
+          'price-range': this.filter.priceRange,
         }
         const res = await request.get('/stores', { params: params })
         if (res && res.data && Array.isArray(res.data)) {

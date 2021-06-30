@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-auto" max-width="800" tile>
       <div class="pa-5">
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" lazy-validation>
           <span class="title"> Formulaire d'inscription </span>
           <v-spacer></v-spacer>
           <span> S'inscrire en tant que : </span>
@@ -68,24 +68,22 @@
 
             <v-text-field
               v-model="password"
-              :value="myPass"
               :counter="20"
               :rules="passwordRules"
               label="Mot de passe"
               :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append="() => (value = !value)"
-              :type="value ? 'password' : 'text'"
+              @click:append="() => (showPassword = !showPassword)"
+              :type="showPassword ? 'password' : 'text'"
             ></v-text-field>
 
             <v-text-field
               v-model="confirmPassword"
-              :value="myPass"
               :counter="20"
               :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
               label="Confirmation de mot de passe"
               :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append="() => (value = !value)"
-              :type="value ? 'password' : 'text'"
+              @click:append="() => (showConfirmPassword = !showConfirmPassword)"
+              :type="showConfirmPassword ? 'password' : 'text'"
             ></v-text-field>
 
             <div class="pt-5">
@@ -110,11 +108,10 @@
 </template>
 
 <script>
-import { requestMixin } from '@/mixins/requestMixin'
+import { request } from '@/utils/request'
+
 export default {
   name: 'Register',
-  mixins: [requestMixin],
-
   methods: {
     reset() {
       this.$refs.form.reset()
@@ -199,7 +196,9 @@ export default {
     ],
     confirmPasswordRules: [(v) => !!v || 'Mot de passe requis'],
     status: 0,
-    value: String,
+    confirmPassword: '',
+    showPassword: false,
+    showConfirmPassword: false,
   }),
 }
 </script>
