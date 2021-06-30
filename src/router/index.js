@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Stores from '../views/Stores.vue'
+import Home from '@/views/Home'
+import Stores from '@/views/Stores'
+import Login from '@/views/Login'
+import Register from '@/views/Register'
+import Follow from '@/views/Follow'
+import Payment from '@/views/Payment'
+import Profile from '@/views/Profile'
 import store from '@/store'
 
 Vue.use(VueRouter)
@@ -16,6 +21,35 @@ const routes = [
     path: '/stores',
     name: 'Stores',
     component: Stores,
+    props: (route) => ({ searchProp: route.params.searchProp }),
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/follow',
+    name: 'Follow',
+    component: Follow,
+  },
+  {
+    path: '/payment',
+    name: 'Payment',
+    component: Payment,
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/about',
@@ -24,49 +58,16 @@ const routes = [
       import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Register.vue'),
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Login.vue'),
-  },
-  {
     path: '/conditions',
     name: 'Conditions',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Conditions.vue'),
   },
   {
-    path: '/rgpd',
-    name: 'Rgpd',
+    path: '/gdpr',
+    name: 'Gdpr',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Rgpd.vue'),
-  },
-  {
-    path: '/follow',
-    name: 'Follow',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Follow.vue'),
-  },
-  {
-    path: '/payment',
-    name: 'Payment',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Payment.vue'),
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Profile.vue'),
-    meta: {
-      requiresAuth: true,
-    },
+      import(/* webpackChunkName: "about" */ '../views/Gdpr.vue'),
   },
 ]
 

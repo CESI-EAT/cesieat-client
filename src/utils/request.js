@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 
-const baseURL = 'http://localhost:3000/'
+const apiBaseUrl = 'http://localhost:3000/'
 
 /**
  * Extracts and returns the JWT of the stored user.
@@ -29,17 +29,16 @@ export const request = async (
   headers = {},
   params = {},
   data = {},
-  timeout = 0,
-  withCredentials = true
-) => {
-  return axios({
+  timeout = 0
+) =>
+  axios({
     url,
     method,
-    baseURL,
+    baseURL: apiBaseUrl,
     headers: useAuth ? { ...headers, ...getAuthorization() } : headers,
     params,
     data,
     timeout,
-    withCredentials,
   })
-}
+
+export const getImage = (url) => axios.get(url)
