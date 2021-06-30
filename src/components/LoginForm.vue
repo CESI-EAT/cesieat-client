@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { requestMixin } from '@/mixins/requestMixin'
 
 export default {
@@ -95,7 +96,6 @@ export default {
     },
     async submit() {
       const res = await this.request(
-        false,
         'login',
         'post',
         {},
@@ -104,8 +104,7 @@ export default {
         0
       ).catch((error) => this.wrongCredentials(error))
       if (res && res.data && res.data.success) {
-        const { data: user } = await this.request(false, 'me', 'get')
-        this.$store.commit('set_user', user)
+        this.$store.dispatch('auth/getUser')
         this.goToHome()
       } else {
         console.log('mauvais mdp')

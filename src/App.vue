@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay v-if="isFetchingUser">
+    <v-overlay v-if="status === 'loading'">
       <v-progress-circular
         :size="70"
         :width="7"
@@ -8,7 +8,7 @@
         indeterminate
       ></v-progress-circular>
     </v-overlay>
-    <v-app v-if="!isFetchingUser">
+    <v-app v-else>
       <v-app-bar app color="primary">
         <div class="d-flex justify-start">
           <v-btn text color="transparent" @click="goToHome">
@@ -24,16 +24,11 @@
         </div>
 
         <v-spacer></v-spacer>
-        <v-btn v-if="$store.getters.isLoggedIn" to="/profile" text color="base">
+        <v-btn v-if="isLoggedIn" to="/profile" text color="base">
           <v-icon class="mr-2">mdi-account</v-icon>
           <span>Profil</span>
         </v-btn>
-        <v-btn
-          v-if="$store.getters.isLoggedIn"
-          @click="logout"
-          text
-          color="base"
-        >
+        <v-btn v-if="isLoggedIn" @click="logout" text color="base">
           <v-icon class="mr-2">mdi-logout</v-icon>
           <span>Déconnexion</span>
         </v-btn>
@@ -73,24 +68,20 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import { requestMixin } from '@/mixins/requestMixin'
 
 export default {
   name: 'App',
   mixins: [requestMixin],
-
-  data: () => ({
-    isFetchingUser: true,
-  }),
-  // eslint-disable-next-line prettier/prettier
-  created: async function () {
-    try {
-      const res = await this.request(false, 'me', 'get')
-      this.$store.commit('set_user', res.data)
-    } catch (err) {
-      console.log('error: ', err)
-    }
-    this.isFetchingUser = false
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
+    ...mapState({
+      status: (state) => state.auth.status,
+    }),
+  },
+  created() {
+    this.$store.dispatch('auth/getUser')
   },
   methods: {
     goToLoginPage() {

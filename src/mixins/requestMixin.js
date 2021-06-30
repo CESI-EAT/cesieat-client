@@ -1,8 +1,7 @@
-import { getAuthorization, request, getImage } from '@/utils/request'
+import { request, getImage } from '@/utils/request'
 
 export const requestMixin = {
   methods: {
-    getAuthorization,
     request,
     getImage,
   },
