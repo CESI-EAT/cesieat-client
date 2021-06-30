@@ -8,6 +8,7 @@ import Follow from '@/views/Follow'
 import Payment from '@/views/Payment'
 import Profile from '@/views/Profile'
 import store from '@/store'
+import { Store } from 'vuex'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,13 @@ const routes = [
     name: 'Stores',
     component: Stores,
     props: (route) => ({ searchProp: route.params.searchProp }),
+  },
+  {
+    path: '/stores/:id',
+    name: 'Store',
+    component: () =>
+      import(/* webpackChunkName: "store" */ '../views/Store.vue'),
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: '/register',
@@ -55,7 +63,7 @@ const routes = [
     path: '/stripe',
     name: 'Stripe',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Stripe.vue'),
+      import(/* webpackChunkName: "stripe" */ '../views/Stripe.vue'),
   },
   {
     path: '/about',
@@ -67,13 +75,12 @@ const routes = [
     path: '/conditions',
     name: 'Conditions',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Conditions.vue'),
+      import(/* webpackChunkName: "conditions" */ '../views/Conditions.vue'),
   },
   {
     path: '/gdpr',
     name: 'Gdpr',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Gdpr.vue'),
+    component: () => import(/* webpackChunkName: "gdpr" */ '../views/Gdpr.vue'),
   },
 ]
 
