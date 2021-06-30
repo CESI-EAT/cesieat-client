@@ -1,15 +1,6 @@
 import axios from 'axios'
-import store from '@/store'
 
 const apiBaseUrl = 'http://localhost:3000/'
-
-/**
- * Extracts and returns the JWT of the stored user.
- * @returns The stored user's JWT.
- */
-export const getAuthorization = () => ({
-  Authorization: `Bearer ${store.getters.jwt}`,
-})
 
 /**
  * Makes an async axios request with the given parameters. For further information, please refer to https://www.npmjs.com/package/axios in the Request Config section.
@@ -23,7 +14,6 @@ export const getAuthorization = () => ({
  * @returns An axios Promise object to use with .then().catch() or async/await.
  */
 export const request = async (
-  useAuth = true,
   url = '',
   method = 'get',
   headers = {},
@@ -36,7 +26,7 @@ export const request = async (
     url,
     method,
     baseURL: apiBaseUrl,
-    headers: useAuth ? { ...headers, ...getAuthorization() } : headers,
+    headers: headers,
     params,
     data,
     timeout,

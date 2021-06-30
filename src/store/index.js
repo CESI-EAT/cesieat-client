@@ -1,29 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import auth from './modules/auth'
+import stores from './modules/stores'
 
 Vue.use(Vuex)
 
+const debug = process.env.NODE_ENV !== 'production'
+
 export default new Vuex.Store({
-  state: {
-    status: '',
-    user: null,
+  modules: {
+    auth,
+    stores,
   },
-  getters: {
-    jwt: (state) => state.token || null,
-    isLoggedIn: (state) => !!state.user,
-    authStatus: (state) => state.status,
-  },
-  mutations: {
-    set_user(state, user) {
-      state.user = user
-    },
-    auth_success(state, authRes) {
-      state.isLoggedIn = authRes.user
-    },
-    logout(state) {
-      state.user = null
-    },
-  },
-  actions: {},
-  modules: {},
+  strict: debug,
 })

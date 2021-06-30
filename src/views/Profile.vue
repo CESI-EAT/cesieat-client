@@ -125,26 +125,15 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import { requestMixin } from '@/mixins/requestMixin'
 
 export default {
   name: 'Profile',
   mixins: [requestMixin],
-  data: function () {
-    return {
-      user: {
-        firstname: '',
-        lastname: '',
-        address: '',
-        phoneNumber: '',
-        email: '',
-      },
-    }
-  },
-  mounted: async function () {
-    const { data } = await this.request(false, 'me', 'get')
-    this.user = data
-  },
+  computed: mapState({
+    user: (state) => state.auth.user,
+  }),
   methods: {
     submit() {
       this.$router.push('/login')
