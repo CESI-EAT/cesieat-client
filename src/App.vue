@@ -44,7 +44,7 @@
       <v-footer color="primary lighten-1" padless>
         <v-row justify="center" no-gutters>
           <v-btn color="white" text rounded class="my-1" @click="goToHome">
-            Home
+            Accueil
           </v-btn>
           <v-btn
             color="white"
@@ -69,11 +69,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { requestMixin } from '@/mixins/requestMixin'
+import { request } from '@/utils/request'
 
 export default {
   name: 'App',
-  mixins: [requestMixin],
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapState({

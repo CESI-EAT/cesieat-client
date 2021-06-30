@@ -126,11 +126,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { requestMixin } from '@/mixins/requestMixin'
 
 export default {
   name: 'Profile',
-  mixins: [requestMixin],
   computed: {
     ...mapState('auth', ['status', 'user']),
   },
