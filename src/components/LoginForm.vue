@@ -79,11 +79,10 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { requestMixin } from '@/mixins/requestMixin'
+import { request } from '../utils/request'
 
 export default {
   name: 'LoginForm',
-  mixins: [requestMixin],
   methods: {
     reset() {
       this.$refs.form.reset()
@@ -95,14 +94,9 @@ export default {
       this.$router.push('/register')
     },
     async submit() {
-      const res = await this.request(
-        'login',
-        'post',
-        {},
-        {},
-        { email: this.email, password: this.password },
-        0
-      ).catch((error) => this.wrongCredentials(error))
+      const res = await request
+        .post('login', { email: this.email, password: this.password })
+        .catch(() => this.wrongCredentials())
       if (res && res.data && res.data.success) {
         this.$store.dispatch('auth/getUser')
         this.goToHome()
@@ -112,7 +106,6 @@ export default {
     },
     wrongCredentials() {
       this.errors = true
-      console
     },
   },
   data: () => ({

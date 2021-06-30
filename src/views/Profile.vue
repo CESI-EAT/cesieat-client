@@ -15,7 +15,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Nom"
-                    v-model="user.lastname"
+                    :value="user.lastname"
                     required
                     outlined
                   ></v-text-field>
@@ -23,7 +23,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Prénom"
-                    v-model="user.firstname"
+                    :value="user.firstname"
                     required
                     outlined
                   ></v-text-field>
@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Email"
-                    v-model="user.email"
+                    :value="user.email"
                     required
                     outlined
                   ></v-text-field>
@@ -41,7 +41,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Numéro de téléphone"
-                    v-model="user.phoneNumber"
+                    :value="user.phoneNumber"
                     required
                     outlined
                   ></v-text-field>
@@ -113,7 +113,7 @@
               </div>
             </div>
             <div>
-              <v-btn @click="reset" color="primary" class="mr-4">
+              <v-btn type="submit" color="primary" class="mr-4">
                 Modifier
               </v-btn>
             </div>
@@ -131,12 +131,13 @@ import { requestMixin } from '@/mixins/requestMixin'
 export default {
   name: 'Profile',
   mixins: [requestMixin],
-  computed: mapState({
-    user: (state) => state.auth.user,
-  }),
+  computed: {
+    ...mapState('auth', ['status', 'user']),
+  },
   methods: {
+    ...mapActions(['updateProfile']),
     submit() {
-      this.$router.push('/login')
+      this.updateProfile(this.user)
     },
     reset() {
       this.$router.push('/login')

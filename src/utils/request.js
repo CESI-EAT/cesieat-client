@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-const apiBaseUrl = 'http://localhost:3000/'
+const BASE_URL = 'http://localhost:3000/'
 
 /**
  * Makes an async axios request with the given parameters. For further information, please refer to https://www.npmjs.com/package/axios in the Request Config section.
@@ -13,24 +12,11 @@ const apiBaseUrl = 'http://localhost:3000/'
  * @param {Number} timeout The maximum allowed time before getting a response from the API. Default 0 (no timeout).
  * @returns An axios Promise object to use with .then().catch() or async/await.
  */
-export const request = async (
-  url = '',
-  method = 'get',
-  headers = {},
-  params = {},
-  data = {},
-  timeout = 0,
-  withCredentials = true
-) =>
-  axios({
-    url,
-    method,
-    baseURL: apiBaseUrl,
-    headers: headers,
-    params,
-    data,
-    timeout,
-    withCredentials,
-  })
+
+export const request = axios.create({
+  baseURL: BASE_URL,
+  timeout: 1000,
+  withCredentials: true,
+})
 
 export const getImage = (url) => axios.get(url)

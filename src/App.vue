@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay v-if="status === 'loading'">
+    <v-overlay v-if="status === 'loading' && user === null">
       <v-progress-circular
         :size="70"
         :width="7"
@@ -78,6 +78,7 @@ export default {
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapState({
       status: (state) => state.auth.status,
+      user: (state) => state.auth.user,
     }),
   },
   created() {

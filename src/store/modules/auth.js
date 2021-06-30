@@ -2,7 +2,7 @@ import { request } from '../../utils/request'
 
 // initial state
 const state = () => ({
-  status: '',
+  status: null,
   user: null,
 })
 
@@ -16,7 +16,7 @@ const actions = {
   async getUser({ commit, state }) {
     commit('setStatus', 'loading')
     try {
-      const res = await request('me', 'GET')
+      const res = await request.get('me')
       commit('setUser', res.data)
       commit('setStatus', 'success')
     } catch (err) {
@@ -27,8 +27,21 @@ const actions = {
   async logout({ commit, state }) {
     commit('setStatus', 'loading')
     try {
-      const res = await request('logout', 'POST')
+      const res = await request.post('logout')
       commit('setUser', null)
+      commit('setStatus', 'success')
+    } catch (err) {
+      commit('setStatus', 'failed')
+    }
+  },
+
+  async updateProfule({ commit, state }, payload) {
+    console.log('state: ', state)
+    commit('setStatus', 'loading')
+    const userId = state.user.id
+    try {
+      const user = await request.patch(`/users/${userId}`, payload)
+      commit('setUser', user)
       commit('setStatus', 'success')
     } catch (err) {
       commit('setStatus', 'failed')

@@ -75,6 +75,7 @@
 <script>
 import StoreCard from '@/components/stores/StoreCard'
 import { requestMixin } from '@/mixins/requestMixin'
+import { request } from '../utils/request'
 
 export default {
   name: 'Stores',
@@ -119,16 +120,7 @@ export default {
           search: this.search,
           'price-range': this.priceRange,
         }
-        const res = await this.request(
-          false,
-          '/stores',
-          'get',
-          null,
-          params,
-          null,
-          0
-        )
-        console.log(res.data)
+        const res = await request.get('/stores', { params: params })
         if (res && res.data && Array.isArray(res.data)) {
           this.stores = res.data
         } else {

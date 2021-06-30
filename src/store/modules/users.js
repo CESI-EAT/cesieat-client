@@ -1,15 +1,15 @@
+import { request } from '../../utils/request'
+
 // initial state
 const state = () => ({
-  all: [],
+  status: null,
 })
 
 // getters
 const getters = {}
 
 // actions
-const actions = {
-  async findAll() {},
-}
+const actions = {}
 
 // mutations
 const mutations = {
@@ -24,7 +24,6 @@ const mutations = {
 }
 
 export default {
-  namespaced: true,
   state,
   getters,
   actions,
