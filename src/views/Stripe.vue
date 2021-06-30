@@ -26,9 +26,8 @@ export default {
       loading: false,
       lineItems: [
         {
-          price: '',
-          amount: 20,
-          currency: 'eur',
+          price: 'price_1J85r4Ew5XsHJ2Dab4T2OeQH',
+          quantity: 1,
         },
       ],
       successURL: 'https://localhost:9377/follow',
