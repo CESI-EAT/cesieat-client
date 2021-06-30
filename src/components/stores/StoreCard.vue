@@ -42,12 +42,7 @@ export default {
   },
   methods: {
     goToStorePage() {
-      this.$router.push({
-        name: 'Stores',
-        params: {
-          searchProp: this.searchString,
-        },
-      })
+      this.$router.push(`/stores/${this.store._id}`)
     },
   },
 }
