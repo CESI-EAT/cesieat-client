@@ -34,14 +34,12 @@ const actions = {
       commit('setStatus', 'failed')
     }
   },
-
-  async updateProfule({ commit, state }, payload) {
-    console.log('state: ', state)
+  async updateProfile({ commit, state }, payload) {
     commit('setStatus', 'loading')
     const userId = state.user.id
     try {
-      const user = await request.patch(`/users/${userId}`, payload)
-      commit('setUser', user)
+      await request.patch(`/users/${userId}`, payload)
+      commit('setUser', Object.assign(state.user, payload))
       commit('setStatus', 'success')
     } catch (err) {
       commit('setStatus', 'failed')

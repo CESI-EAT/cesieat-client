@@ -15,7 +15,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Nom"
-                    :value="user.lastname"
+                    v-model="currentUser.lastname"
                     required
                     outlined
                   ></v-text-field>
@@ -23,7 +23,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Prénom"
-                    :value="user.firstname"
+                    v-model="currentUser.firstname"
                     required
                     outlined
                   ></v-text-field>
@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Email"
-                    :value="user.email"
+                    v-model="currentUser.email"
                     required
                     outlined
                   ></v-text-field>
@@ -41,7 +41,17 @@
                 <div class="col-6">
                   <v-text-field
                     label="Numéro de téléphone"
-                    :value="user.phoneNumber"
+                    v-model="currentUser.phoneNum"
+                    required
+                    outlined
+                  ></v-text-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <v-text-field
+                    label="Adresse"
+                    v-model="currentUser.address"
                     required
                     outlined
                   ></v-text-field>
@@ -49,7 +59,14 @@
               </div>
             </div>
             <div class="pt-2">
-              <v-btn color="primary" class="mr-4"> Modifier </v-btn>
+              <v-btn type="submit" color="primary" class="mr-4">
+                <v-progress-circular
+                  v-if="status === 'loading'"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <span v-else>Modifier</span>
+              </v-btn>
             </div>
           </form>
         </v-form>
@@ -114,7 +131,12 @@
             </div>
             <div>
               <v-btn type="submit" color="primary" class="mr-4">
-                Modifier
+                <v-progress-circular
+                  v-if="status === 'loading'"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <span v-else>Modifier</span>
               </v-btn>
             </div>
           </form>
@@ -126,18 +148,22 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { requestMixin } from '@/mixins/requestMixin'
 
 export default {
   name: 'Profile',
-  mixins: [requestMixin],
+  data: () => ({
+    currentUser: {},
+  }),
+  created() {
+    this.currentUser = { ...this.$store.state.auth.user }
+  },
   computed: {
     ...mapState('auth', ['status', 'user']),
   },
   methods: {
-    ...mapActions(['updateProfile']),
-    submit() {
-      this.updateProfile(this.user)
+    ...mapActions('auth', ['updateProfile']),
+    submit(ev) {
+      this.updateProfile(this.currentUser)
     },
     reset() {
       this.$router.push('/login')
