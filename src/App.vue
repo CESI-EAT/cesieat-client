@@ -88,12 +88,7 @@ export default {
       this.$router.push('/login')
     },
     async logout() {
-      try {
-        await this.request(false, 'logout', 'post')
-        this.$store.commit('logout')
-      } catch (err) {
-        console.log('error: ', err)
-      }
+      this.$store.dispatch('auth/logout')
       this.goToHome()
     },
     goToHome() {

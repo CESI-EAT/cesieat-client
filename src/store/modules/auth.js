@@ -16,11 +16,21 @@ const actions = {
   async getUser({ commit, state }) {
     commit('setStatus', 'loading')
     try {
-      const res = await request('me', 'get')
+      const res = await request('me', 'GET')
       commit('setUser', res.data)
       commit('setStatus', 'success')
     } catch (err) {
       commit('setUser', null)
+      commit('setStatus', 'failed')
+    }
+  },
+  async logout({ commit, state }) {
+    commit('setStatus', 'loading')
+    try {
+      const res = await request('logout', 'POST')
+      commit('setUser', null)
+      commit('setStatus', 'success')
+    } catch (err) {
       commit('setStatus', 'failed')
     }
   },
