@@ -24,7 +24,7 @@ const actions = {
       commit('setStatus', 'failed')
     }
   },
-  async logout({ commit, state }) {
+  async logout({ commit }) {
     commit('setStatus', 'loading')
     try {
       const res = await request.post('logout')
@@ -34,14 +34,22 @@ const actions = {
       commit('setStatus', 'failed')
     }
   },
-
-  async updateProfule({ commit, state }, payload) {
-    console.log('state: ', state)
+  async updateProfile({ commit, state }, payload) {
     commit('setStatus', 'loading')
     const userId = state.user.id
     try {
-      const user = await request.patch(`/users/${userId}`, payload)
-      commit('setUser', user)
+      const { data } = await request.patch(`/users/${userId}`, payload)
+      commit('setUser', data.user)
+      commit('setStatus', 'success')
+    } catch (err) {
+      commit('setStatus', 'failed')
+    }
+  },
+
+  async changePassword({ commit }, payload) {
+    commit('setStatus', 'loading')
+    try {
+      await request.post(`/change-password`, payload)
       commit('setStatus', 'success')
     } catch (err) {
       commit('setStatus', 'failed')

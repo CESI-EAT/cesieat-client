@@ -15,7 +15,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Nom"
-                    :value="user.lastname"
+                    v-model="user.lastname"
                     required
                     outlined
                   ></v-text-field>
@@ -23,7 +23,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Prénom"
-                    :value="user.firstname"
+                    v-model="user.firstname"
                     required
                     outlined
                   ></v-text-field>
@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Email"
-                    :value="user.email"
+                    v-model="user.email"
                     required
                     outlined
                   ></v-text-field>
@@ -41,7 +41,17 @@
                 <div class="col-6">
                   <v-text-field
                     label="Numéro de téléphone"
-                    :value="user.phoneNumber"
+                    v-model="user.phoneNum"
+                    required
+                    outlined
+                  ></v-text-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <v-text-field
+                    label="Adresse"
+                    v-model="user.address"
                     required
                     outlined
                   ></v-text-field>
@@ -49,7 +59,14 @@
               </div>
             </div>
             <div class="pt-2">
-              <v-btn color="primary" class="mr-4"> Modifier </v-btn>
+              <v-btn type="submit" color="primary" class="mr-4">
+                <v-progress-circular
+                  v-if="status === 'loading'"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <span v-else>Modifier</span>
+              </v-btn>
             </div>
           </form>
         </v-form>
@@ -91,7 +108,7 @@
           <v-divider class="pb-4"></v-divider>
           <v-spacer></v-spacer>
 
-          <form @submit.prevent="submit">
+          <form @submit.prevent="submitNewPassword">
             <span
               >Pour modifier votre mot de passe, veuillez saisir votre mot de
               passe actuel pour confirmer votre identité.</span
@@ -100,21 +117,36 @@
               <div class="col-6">
                 <v-text-field
                   label="Mot de passe actuel"
+                  v-model="currentPassword"
                   required
                   outlined
+                  :append-icon="showCurrentPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="
+                    () => (showCurrentPassword = !showCurrentPassword)
+                  "
+                  :type="showCurrentPassword ? 'password' : 'text'"
                 ></v-text-field>
               </div>
               <div class="col-6">
                 <v-text-field
                   label="Nouveau mot de passe"
+                  v-model="newPassword"
                   required
                   outlined
+                  :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="() => (showNewPassword = !showNewPassword)"
+                  :type="showNewPassword ? 'password' : 'text'"
                 ></v-text-field>
               </div>
             </div>
             <div>
               <v-btn type="submit" color="primary" class="mr-4">
-                Modifier
+                <v-progress-circular
+                  v-if="status === 'loading'"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <span v-else>Modifier</span>
               </v-btn>
             </div>
           </form>
@@ -129,13 +161,28 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Profile',
+  data: () => ({
+    currentPassword: '',
+    newPassword: '',
+    showNewPassword: true,
+    showCurrentPassword: true,
+  }),
   computed: {
-    ...mapState('auth', ['status', 'user']),
+    ...mapState('auth', {
+      status: (state) => state.status,
+      user: (state) => ({ ...state.user }),
+    }),
   },
   methods: {
-    ...mapActions(['updateProfile']),
+    ...mapActions('auth', ['updateProfile', 'changePassword']),
     submit() {
       this.updateProfile(this.user)
+    },
+    submitNewPassword() {
+      this.changePassword({
+        currentPassword: this.currentPassword,
+        newPassword: this.newPassword,
+      })
     },
     reset() {
       this.$router.push('/login')

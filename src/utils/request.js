@@ -15,7 +15,7 @@ const BASE_URL = 'http://localhost:3000/'
 
 export const request = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 3000,
   withCredentials: true,
 })
 
