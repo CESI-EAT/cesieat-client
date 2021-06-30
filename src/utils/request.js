@@ -29,7 +29,8 @@ export const request = async (
   headers = {},
   params = {},
   data = {},
-  timeout = 0
+  timeout = 0,
+  withCredentials = true
 ) =>
   axios({
     url,
@@ -39,6 +40,7 @@ export const request = async (
     params,
     data,
     timeout,
+    withCredentials,
   })
 
 export const getImage = (url) => axios.get(url)
