@@ -15,6 +15,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Nom"
+                    name="lastname"
                     v-model="user.lastname"
                     required
                     outlined
@@ -23,6 +24,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Prénom"
+                    name="firstname"
                     v-model="user.firstname"
                     required
                     outlined
@@ -33,6 +35,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Email"
+                    name="email"
                     v-model="user.email"
                     required
                     outlined
@@ -41,6 +44,7 @@
                 <div class="col-6">
                   <v-text-field
                     label="Numéro de téléphone"
+                    name="phone"
                     v-model="user.phoneNum"
                     required
                     outlined
@@ -59,13 +63,13 @@
               </div>
             </div>
             <div class="pt-2">
-              <v-btn type="submit" color="primary" class="mr-4">
-                <v-progress-circular
-                  v-if="status === 'loading'"
-                  indeterminate
-                  color="primary"
-                ></v-progress-circular>
-                <span v-else>Modifier</span>
+              <v-btn
+                type="submit"
+                color="primary"
+                class="mr-4"
+                :loading="isUpdating"
+              >
+                <span>Modifier</span>
               </v-btn>
             </div>
           </form>
@@ -140,13 +144,13 @@
               </div>
             </div>
             <div>
-              <v-btn type="submit" color="primary" class="mr-4">
-                <v-progress-circular
-                  v-if="status === 'loading'"
-                  indeterminate
-                  color="primary"
-                ></v-progress-circular>
-                <span v-else>Modifier</span>
+              <v-btn
+                type="submit"
+                color="primary"
+                class="mr-4"
+                :loading="isResetingPassword"
+              >
+                <span>Modifier</span>
               </v-btn>
             </div>
           </form>
@@ -157,7 +161,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Profile',
@@ -168,10 +172,7 @@ export default {
     showCurrentPassword: true,
   }),
   computed: {
-    ...mapState('auth', {
-      status: (state) => state.status,
-      user: (state) => ({ ...state.user }),
-    }),
+    ...mapGetters('auth', ['user', 'isUpdating', 'isResetingPassword']),
   },
   methods: {
     ...mapActions('auth', ['updateProfile', 'changePassword']),

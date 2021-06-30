@@ -2,68 +2,77 @@ import { request } from '../../utils/request'
 
 // initial state
 const state = () => ({
-  status: null,
   user: null,
+  isLoading: false,
+  isUpdating: false,
+  isCreating: false,
+  isResetingPassword: false,
 })
 
 // getters
 const getters = {
   isLoggedIn: (state) => !!state.user,
+  user: (state) => state.user,
+  isLoading: (state) => state.isLoading,
+  isUpdating: (state) => state.isUpdating,
+  isCreating: (state) => state.isCreating,
+  isResetingPassword: (state) => state.isResetingPassword,
 }
 
 // actions
 const actions = {
-  async getUser({ commit, state }) {
-    commit('setStatus', 'loading')
+  async getUser({ commit }) {
+    commit('setUserIsLoading', true)
     try {
       const res = await request.get('me')
       commit('setUser', res.data)
-      commit('setStatus', 'success')
     } catch (err) {
       commit('setUser', null)
-      commit('setStatus', 'failed')
     }
+    commit('setUserIsLoading', false)
   },
+
   async logout({ commit }) {
-    commit('setStatus', 'loading')
+    commit('setUserIsLoading', true)
     try {
-      const res = await request.post('logout')
+      await request.post('logout')
       commit('setUser', null)
-      commit('setStatus', 'success')
     } catch (err) {
-      commit('setStatus', 'failed')
+      console.log(err)
     }
+    commit('setUserIsLoading', false)
   },
+
   async updateProfile({ commit, state }, payload) {
-    commit('setStatus', 'loading')
+    commit('setUserIsUpdating', true)
     const userId = state.user.id
     try {
-      const { data } = await request.patch(`/users/${userId}`, payload)
+      const { data } = await request.patch(`users/${userId}`, payload)
       commit('setUser', data.user)
-      commit('setStatus', 'success')
     } catch (err) {
-      commit('setStatus', 'failed')
+      console.log(err)
     }
+    commit('setUserIsUpdating', false)
   },
 
   async changePassword({ commit }, payload) {
-    commit('setStatus', 'loading')
+    commit('setUserIsResetingPassword', true)
     try {
-      await request.post(`/change-password`, payload)
-      commit('setStatus', 'success')
+      await request.post(`change-password`, payload)
     } catch (err) {
-      commit('setStatus', 'failed')
+      console.log(err)
     }
+    commit('setUserIsResetingPassword', false)
   },
   async register({ commit }, payload) {
-    commit('setStatus', 'loading')
+    commit('setUserIsCreating', true)
     try {
-      const { data } = request.post(`/register`, payload)
+      const { data } = request.post(`register`, payload)
       commit('setUser', data.user)
-      commit('setStatus', 'success')
     } catch (err) {
-      commit('setStatus', 'failed')
+      console.log(err)
     }
+    commit('setUserIsCreating', false)
   },
 }
 
@@ -72,8 +81,17 @@ const mutations = {
   setUser(state, user) {
     state.user = user
   },
-  setStatus(state, status) {
-    state.status = status
+  setUserIsLoading(state, isLoading) {
+    state.isLoading = isLoading
+  },
+  setUserIsCreating(state, isCreating) {
+    state.isCreating = isCreating
+  },
+  setUserIsUpdating(state, isUpdating) {
+    state.isUpdating = isUpdating
+  },
+  setUserIsResetingPassword(state, isResetingPassword) {
+    state.isResetingPassword = isResetingPassword
   },
 }
 

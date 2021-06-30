@@ -70,7 +70,7 @@
               </v-dialog>
             </v-col>
           </v-row>
-          <v-row v-if="loading">
+          <v-row v-if="isLoading">
             <v-col sm="6" md="4" v-for="i in 12" :key="`product_${i}`">
               <v-card>
                 <v-skeleton-loader
@@ -135,7 +135,7 @@ export default {
     this.getStores()
   },
   computed: {
-    ...mapGetters('stores', ['stores', 'loading']),
+    ...mapGetters('stores', ['stores', 'isLoading']),
     search() {
       if (this.searchString && this.searchString.length > 0) {
         return this.searchString
@@ -165,7 +165,7 @@ export default {
       this.getStores()
     },
     async getStores() {
-      if (!this.loading) {
+      if (!this.isLoading) {
         const params = {
           search: this.search,
           'price-range': this.filter.priceRange,
