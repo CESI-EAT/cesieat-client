@@ -1,6 +1,6 @@
 <template>
-  <v-card min-width="220">
-    <v-img cover :src="getImage(store.image)" />
+  <v-card min-width="220" class="storecard" @click="goToStorePage()">
+    <v-img cover :src="store.image" height="220" />
     <v-card-title>
       {{ store.name }}
     </v-card-title>
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { requestMixin } from '@/mixins/requestMixin.js'
 import StoreCardRating from './StoreCardRating.vue'
 
 export default {
@@ -41,6 +40,26 @@ export default {
       required: true,
     },
   },
-  mixins: [requestMixin],
+  methods: {
+    goToStorePage() {
+      this.$router.push({
+        name: 'Stores',
+        params: {
+          searchProp: this.searchString,
+        },
+      })
+    },
+  },
 }
 </script>
+
+<style scoped>
+.storecard {
+  cursor: pointer;
+  transform: scale(1);
+  transition: 0.15s ease;
+}
+.storecard:hover {
+  transform: scale(1.02);
+}
+</style>
