@@ -47,9 +47,8 @@ export default {
     }
   },
   methods: {
-    async submit() {
-      await this.createOrder()
-      this.$router(`/orders/${this.order._id}/follow`)
+    submit() {
+      this.createOrder()
       // You will be redirected to Stripe's secure checkout page
       // this.$refs.checkoutRef.redirectToCheckout()
     },

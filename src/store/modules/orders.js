@@ -1,3 +1,4 @@
+import router from '../../router'
 import { request } from '../../utils/request'
 
 // initial state
@@ -60,8 +61,11 @@ const actions = {
   async createOrder({ commit }, payload) {
     commit('setOrdersIsCreating', true)
     try {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       const res = await request.post(`orders`, payload)
-      commit('addOrder', res.data.order)
+      commit('addOrder', res.data)
+      commit('setOrdersIsCreating', false)
+      router.push(`/orders/${res.data._id}/follow`)
     } catch (err) {
       console.log(err)
     }
@@ -107,7 +111,7 @@ const actions = {
   async validCart({ commit }, payload) {
     commit('setCartIsLoading', true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       commit('setCart', payload)
     } catch (err) {
       console.log(err)
@@ -119,6 +123,7 @@ const actions = {
 // mutations
 const mutations = {
   addOrder(state, payload) {
+    console.log('payload: ', payload)
     state.orders.push(payload)
     state.order = payload
   },

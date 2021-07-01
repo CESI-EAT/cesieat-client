@@ -1,19 +1,26 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="800" tile>
+    <v-card class="mx-auto" max-width="800" tile :loading="isCreating">
+      <template slot="progress">
+        <v-progress-linear
+          color="primary"
+          height="10"
+          indeterminate
+        ></v-progress-linear>
+      </template>
       <div class="pa-5">
         <v-form ref="form" lazy-validation>
-          <span class="title"> Formulaire d'inscription </span>
+          <span class="title">Vous attendez quoi pour vous s'inscrire ?</span>
           <v-spacer></v-spacer>
           <span> S'inscrire en tant que : </span>
           <v-btn-toggle v-model="status">
-            <v-btn :color="active ? 'primary' : ''" class="ml-16" key="client">
+            <v-btn class="ml-16" value="Consommateur">
               Client
             </v-btn>
-            <v-btn :color="active ? 'primary' : ''" key="livreur">
+            <v-btn value="Livreur">
               Livreur
             </v-btn>
-            <v-btn :color="active ? 'primary' : ''" key="restaurant">
+            <v-btn value="Restaurateur">
               Restaurateur
             </v-btn>
           </v-btn-toggle>
@@ -50,17 +57,15 @@
             <v-text-field
               v-model="phoneNumber"
               :counter="12"
-              :error-messages="errors"
               :rules="phoneNumberRules"
               label="Numéro de téléphone"
               required
             ></v-text-field>
 
             <v-text-field
-              v-if="status === 2"
+              v-if="status === 'Restaurateur'"
               v-model="siret"
               :counter="14"
-              :error-messages="errors"
               :rules="siretRules"
               label="SIRET"
               required
@@ -71,9 +76,9 @@
               :counter="20"
               :rules="passwordRules"
               label="Mot de passe"
-              :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="() => (showPassword = !showPassword)"
-              :type="showPassword ? 'password' : 'text'"
+              :type="!showPassword ? 'password' : 'text'"
             ></v-text-field>
 
             <v-text-field
@@ -81,18 +86,13 @@
               :counter="20"
               :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
               label="Confirmation de mot de passe"
-              :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="() => (showConfirmPassword = !showConfirmPassword)"
-              :type="showConfirmPassword ? 'password' : 'text'"
+              :type="!showConfirmPassword ? 'password' : 'text'"
             ></v-text-field>
             <div class="pt-2">
               <span class="subtitle-2"> Vous avez déjà un compte ? </span>
-              <v-btn
-                text
-                class="subtitle-2 pl-1"
-                color="primary"
-                @click="goToLogin"
-              >
+              <v-btn text class="subtitle-2 pl-1" color="primary" to="/login">
                 Se connecter
               </v-btn>
             </div>
@@ -104,8 +104,8 @@
               <v-btn
                 class="mr-4"
                 type="submit"
-                :disabled="invalid"
                 color="primary"
+                :loading="isCreating"
               >
                 S'inscrire
               </v-btn>
@@ -119,48 +119,12 @@
 
 <script>
 import { request } from '@/utils/request'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Register',
-  methods: {
-    ...mapActions('auth', ['register']),
-    reset() {
-      this.$refs.form.reset()
-    },
-    goToHome() {
-      this.$router.push('/')
-    },
-    goToLogin() {
-      this.$router.push('/login')
-    },
-    async submit() {
-      const payload = {
-        email: this.email,
-        lastname: this.surname,
-        firstname: this.name,
-        address: this.address,
-        password: this.password,
-        phone_number: this.phoneNumber,
-        roleId: 1,
-      }
-      try {
-        await this.register(payload)
-        this.goToHome()
-      } catch (err) {
-        console.log(err)
-      }
-    },
-  },
-
-  computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmPassword ||
-        'Les mots de passes ne sont pas identiques'
-    },
-  },
   data: () => ({
+    roles: [],
     surname: '',
     name: '',
     nameRules: [
@@ -190,7 +154,8 @@ export default {
     siret: '',
     siretRules: [
       (v) => !!v || 'Le SIRET est requis',
-      (v) => v.length === 14 || "Le numéro de SIRET n'est pas assez long",
+      (v) => v.length <= 14 || "Le numéro de SIRET n'est pas assez long",
+      (v) => v.length >= 14 || 'Le numéro de SIRET est trop long',
       (v) => /^[0-9]+$/.test(v) || 'SIRET invalide',
     ],
     password: '',
@@ -201,10 +166,47 @@ export default {
         /^[A-Za-z0-9_#?!@$%^&*~+-[\]{}()]*$/.test(v) || 'Mot de passe invalide',
     ],
     confirmPasswordRules: [(v) => !!v || 'Mot de passe requis'],
-    status: 0,
+    status: 'Consommateur',
     confirmPassword: '',
     showPassword: false,
     showConfirmPassword: false,
   }),
+  computed: {
+    ...mapGetters('auth', ['isCreating']),
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmPassword ||
+        'Les mots de passes ne sont pas identiques'
+    },
+    role() {
+      return this.roles.find((r) => r.name === this.status)
+    },
+  },
+  async mounted() {
+    const { data: roles } = await request.get('roles')
+    this.roles = roles
+  },
+  methods: {
+    ...mapActions('auth', ['register']),
+    reset() {
+      this.$refs.form.reset()
+    },
+    async submit() {
+      const payload = {
+        email: this.email,
+        lastname: this.surname,
+        firstname: this.name,
+        address: this.address,
+        password: this.password,
+        phoneNum: this.phoneNumber,
+        roleId: this.role.id,
+      }
+      try {
+        await this.register(payload)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+  },
 }
 </script>
