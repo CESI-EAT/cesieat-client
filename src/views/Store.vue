@@ -18,19 +18,36 @@
       </v-row>
       <v-row>
         <v-col sm="12" md="8">
-          <v-container>
-            <v-row>
-              <v-col
-                v-for="(product, index) in store.products"
-                :key="`product_${index}`"
-                sm="12"
-                md="6"
-                lg="4"
+          <v-expansion-panels v-model="panels" multiple>
+            <v-expansion-panel
+              v-for="group in groupedProducts"
+              :key="`productGroup_${group.id}`"
+            >
+              <v-expansion-panel-header>
+                <h3 class="text-capitalize">
+                  {{ group.name }}
+                </h3></v-expansion-panel-header
               >
-                <product :product="product" @add-product="addProduct($event)" />
-              </v-col>
-            </v-row>
-          </v-container>
+              <v-expansion-panel-content>
+                <v-container>
+                  <v-row>
+                    <v-col
+                      v-for="(product, index) in group.products"
+                      :key="`product_${index}`"
+                      sm="12"
+                      md="6"
+                      lg="4"
+                    >
+                      <product
+                        :product="product"
+                        @add-product="addProduct($event)"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-col>
         <v-col sm="12" md="4">
           <cart
@@ -64,17 +81,37 @@ export default {
     },
   },
   async mounted() {
-    this.findStore(this.id)
+    await this.findStore(this.id)
+    this.panels = this.categories.map((e, index) => index)
   },
   data() {
     return {
       cart: [],
+      panels: [],
     }
   },
   computed: {
     ...mapGetters('stores', ['store', 'products', 'categories', 'isLoading']),
-    products() {
-      return this.store.products
+    groupedProducts() {
+      const res = this.categories
+        .map((baseCat) => ({
+          ...baseCat,
+          products: [],
+        }))
+        .sort((a, b) => a.order - b.order)
+      this.products.forEach((product) => {
+        product.categories.forEach((cat) => {
+          const refCat = res.find((resItem) => resItem.id === cat)
+          if (refCat) {
+            refCat.products.push(product)
+          } else {
+            console.error(
+              `Product of id ${product.id} has a category of id ${cat} that doesn't exist.`
+            )
+          }
+        })
+      })
+      return res
     },
   },
   methods: {
@@ -112,6 +149,9 @@ export default {
     },
     getProductIndex(id) {
       return this.cart.findIndex((e) => e.id === id)
+    },
+    productHasCategoryId(product, categoryId) {
+      return product.categories.includes(categoryId)
     },
   },
 }
