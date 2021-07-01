@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { baseUrl } from './url'
-
-const BASE_URL = baseUrl
+import { baseURL } from './url'
 
 /**
  * Makes an async axios request with the given parameters. For further information, please refer to https://www.npmjs.com/package/axios in the Request Config section.
@@ -16,7 +14,7 @@ const BASE_URL = baseUrl
  */
 
 export const request = axios.create({
-  baseURL: BASE_URL,
+  baseURL,
   timeout: 3000,
   withCredentials: true,
 })
