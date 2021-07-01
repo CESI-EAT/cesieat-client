@@ -1,3 +1,5 @@
+click here for the [english translation of the documentation](docs/README_english.md)
+
 # Client du projet CESI'EAT
 
 ## Comment lancer le projet . 
@@ -56,7 +58,7 @@ npm run commit
 Plusieurs questions vont t'être posées :
 1. ``Select the type of change that you're committing``:
 L’assistant te demande de préciser le type de ton commit : as-tu développé une nouvelle fonctionnalité, réparé un bug… ? Sers-toi des flèches de votre clavier pour choisir le type, et appuie sur la touche Entrée pour valider.
-4. ``What is the scope of this change (e.g component of file name): (press enter to skip)``:
+2. ``What is the scope of this change (e.g component of file name): (press enter to skip)``:
 Ici tu peux aussi saisir le scope (la portée) de ta modification / création. C’est facultatif : appuie sur la touche Entrée sans rien noter, si tu préféres.
 3. ``Write a short, imperative tense description of the change (max 85 chars):``
 La troisième étape correspond à la saisie du message du commit. Celui-ci doit être court mais compréhensible. L’outil Commitizen calcule automatiquement le nombre de caractères disponibles pour rédiger ce fameux message.
