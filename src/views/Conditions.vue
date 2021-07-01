@@ -9,8 +9,8 @@
             lg="3"
             v-if="
               !$vuetify.breakpoint.md &&
-              !$vuetify.breakpoint.sm &&
-              !$vuetify.breakpoint.xs
+                !$vuetify.breakpoint.sm &&
+                !$vuetify.breakpoint.xs
             "
           >
             <div class="sticky-card">

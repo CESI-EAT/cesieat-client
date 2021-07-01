@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card tile class="pa-2">
     <v-img cover height="160" :src="product.image" />
     <v-card-title class="text-capitalize">{{ product.name }}</v-card-title>
     <v-card-subtitle>

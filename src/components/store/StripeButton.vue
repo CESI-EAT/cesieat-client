@@ -9,13 +9,16 @@
       :cancel-url="cancelURL"
       @loading="(v) => (loading = v)"
     />
-    <v-btn @click="submit">Pay now!</v-btn>
+    <v-btn width="100%" color="primary" @click="submit">
+      <v-icon class="mr-2">mdi-cart-check</v-icon> Commander</v-btn
+    >
   </div>
 </template>
 
 <script>
 import { StripeCheckout } from '@vue-stripe/vue-stripe'
 export default {
+  name: 'StripeButton',
   components: {
     StripeCheckout,
   },

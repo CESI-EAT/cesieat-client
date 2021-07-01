@@ -7,7 +7,6 @@ import Register from '@/views/Register'
 import Follow from '@/views/Follow'
 import Payment from '@/views/Payment'
 import Profile from '@/views/Profile'
-import Checkout from '@/views/Checkout'
 
 Vue.use(VueRouter)
 
@@ -57,20 +56,6 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-  },
-  {
-    path: '/checkout',
-    name: 'Checkout',
-    component: Checkout,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: '/stripe',
-    name: 'Stripe',
-    component: () =>
-      import(/* webpackChunkName: "stripe" */ '../views/Stripe.vue'),
   },
   {
     path: '/deliveryorders',
