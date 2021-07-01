@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "npm run lint && npm run serve",
+    "dev": "npm run switch:local && npm run lint && npm run serve",
+    "start": "npm run switch:kube && vue-cli-service serve",
     "serve": "vue-cli-service serve",
+    "switch:kube": "ncp ./src/utils/kubeUrl.js ./src/utils/url.js",
+    "switch:local": "ncp ./src/utils/localUrl.js ./src/utils/url.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "commit": "cz"
@@ -34,6 +37,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
+    "ncp": "^2.0.0",
     "prettier": "^2.2.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",

@@ -1,5 +1,7 @@
 import axios from 'axios'
-const BASE_URL = 'http://localhost:3000/'
+import { baseUrl } from './url'
+
+const BASE_URL = baseUrl
 
 /**
  * Makes an async axios request with the given parameters. For further information, please refer to https://www.npmjs.com/package/axios in the Request Config section.
