@@ -16,14 +16,16 @@
       </div>
     </v-card-subtitle>
     <v-card-text>
-      <v-chip
-        v-for="(tag, index) in store.tags"
-        :key="`${tag}_${index}`"
-        class="mr-1 mb-1"
-        small
-      >
-        {{ tag }}
-      </v-chip>
+      <div style="height: 90px">
+        <v-chip
+          v-for="(tag, index) in store.tags"
+          :key="`${tag}_${index}`"
+          class="mr-1 mb-1"
+          small
+        >
+          {{ tag }}
+        </v-chip>
+      </div>
     </v-card-text>
   </v-card>
 </template>
