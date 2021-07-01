@@ -17,10 +17,19 @@
 
 <script>
 import { StripeCheckout } from '@vue-stripe/vue-stripe'
+import { mapGetters } from 'vuex'
 export default {
   name: 'StripeButton',
   components: {
     StripeCheckout,
+  },
+  props: {
+    createOrder: {
+      type: Function,
+    },
+  },
+  computed: {
+    ...mapGetters('orders', ['order']),
   },
   data() {
     this.publishableKey =
@@ -38,9 +47,11 @@ export default {
     }
   },
   methods: {
-    submit() {
+    async submit() {
+      await this.createOrder()
+      this.$router(`/orders/${this.order._id}/follow`)
       // You will be redirected to Stripe's secure checkout page
-      this.$refs.checkoutRef.redirectToCheckout()
+      // this.$refs.checkoutRef.redirectToCheckout()
     },
   },
 }

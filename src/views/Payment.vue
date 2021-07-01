@@ -41,38 +41,66 @@
           <v-card-title>Estimation du temps : 20-45 min </v-card-title>
           <v-divider class="mx-4"></v-divider>
           <v-card-title>Vos articles :</v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item
+                v-for="product in cart.products"
+                :key="'product_' + product.id"
+              >
+                <v-list-item-content class="text-subtitle-1"
+                  ><strong>{{ product.name }}</strong>
+                  {{ product.price.toFixed(2) }} €</v-list-item-content
+                >
+                <v-list-item-action class="text-h5">
+                  x {{ product.quantity }}</v-list-item-action
+                >
+              </v-list-item>
+            </v-list>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col sm="6" md="6" lg="4" xl="3" class="justify-center">
         <v-card
+          :loading="isCreating"
           tile
           class="mx-auto pa-2"
           style="background-color: rgb(246, 246, 246); position: sticky; top: 76px;"
         >
+          <template slot="progress">
+            <v-progress-linear
+              color="primary"
+              height="10"
+              indeterminate
+            ></v-progress-linear>
+          </template>
           <v-card-text>
             <v-list class="transparent">
               <v-list-item>
                 <v-list-item-content>Sous-total</v-list-item-content>
-                <v-list-item-action>25 €</v-list-item-action>
+                <v-list-item-action>{{ this.cart.price }} €</v-list-item-action>
               </v-list-item>
               <v-divider class="mx-4"></v-divider>
               <v-list-item>
                 <v-list-item-content>Service</v-list-item-content>
-                <v-list-item-action>2.5 €</v-list-item-action>
+                <v-list-item-action>2.50 €</v-list-item-action>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>Livraison</v-list-item-content>
-                <v-list-item-action>2.5 €</v-list-item-action>
+                <v-list-item-action>2.50 €</v-list-item-action>
               </v-list-item>
               <v-divider class="mx-4"></v-divider>
               <v-list-item>
                 <v-list-item-content
                   ><strong>Total</strong></v-list-item-content
                 >
-                <v-list-item-action><strong>30 €</strong></v-list-item-action>
+                <v-list-item-action
+                  ><strong
+                    >{{ this.totalPrice.toFixed(2) }} €</strong
+                  ></v-list-item-action
+                >
               </v-list-item>
               <v-list-item>
-                <v-stripe-button></v-stripe-button>
+                <v-stripe-button :createOrder="submitOrder"></v-stripe-button>
               </v-list-item>
             </v-list>
           </v-card-text>
@@ -98,7 +126,7 @@
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Map from '@/components/Map.vue'
 import StripeButton from '@/components/store/StripeButton.vue'
 
@@ -109,6 +137,9 @@ export default {
     ...mapGetters('stores', ['store']),
     ...mapGetters('auth', ['user']),
     ...mapGetters('orders', ['isCreating', 'cart']),
+    totalPrice() {
+      return this.cart.price + 2.5 + 2.5
+    },
   },
   mounted() {
     this.address = this.user ? this.user.address : ''
@@ -122,6 +153,7 @@ export default {
     tips: '',
   }),
   methods: {
+    ...mapActions('orders', ['createOrder']),
     submitOrder() {
       const payload = {
         ...this.cart,
@@ -129,8 +161,10 @@ export default {
         deliverTime: '20-45 min',
         specialInstructions: this.specialInstructions,
         interactionType: this.interactionType,
+        price: this.totalPrice,
         tips: this.tips,
       }
+      this.createOrder(payload)
     },
   },
 }

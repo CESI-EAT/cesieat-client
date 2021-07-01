@@ -46,12 +46,13 @@ const routes = [
     },
   },
   {
-    path: '/follow',
+    path: '/orders/:id/follow',
     name: 'Follow',
     component: Follow,
     meta: {
       requiresAuth: true,
     },
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: '/payment',

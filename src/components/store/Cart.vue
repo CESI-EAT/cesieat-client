@@ -28,7 +28,9 @@
             >
               - {{ product.name }}
             </v-card-title>
-            <v-card-subtitle> - prix : {{ product.price }} € </v-card-subtitle>
+            <v-card-subtitle>
+              Prix : {{ product.price.toFixed(2) }} €
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col class="shrink">
@@ -60,7 +62,7 @@
           </div>
         </v-col>
       </v-row>
-      <h2>Total : {{ price }} €</h2>
+      <h2>Total : {{ price.toFixed(2) }} €</h2>
     </v-card-text>
     <v-card-actions>
       <v-btn color="primary" block @click="submitCart">

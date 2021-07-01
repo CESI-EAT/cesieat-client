@@ -57,22 +57,22 @@ const actions = {
     commit('setOrdersIsUpdating', false)
   },
 
-  async createOrder({ commit, state }, payload) {
+  async createOrder({ commit }, payload) {
     commit('setOrdersIsCreating', true)
     try {
       const res = await request.post(`orders`, payload)
-      commit('setOrders', res.data.orders)
+      commit('addOrder', res.data.order)
     } catch (err) {
       console.log(err)
     }
     commit('setOrdersIsCreating', false)
   },
 
-  async findOrder({ commit, state }, orderId) {
+  async findOrder({ commit }, orderId) {
     commit('setOrdersIsLoading', true)
     try {
       const { data: order } = await request.get(`orders/${orderId}`)
-      commit('setCurrentOrder', order)
+      commit('setOrder', order)
     } catch (err) {
       console.log(err)
     }
@@ -139,10 +139,10 @@ const mutations = {
   setCart(state, cart) {
     state.cart = cart
   },
-  setOrderIsLoading(state, isLoading) {
+  setOrdersIsLoading(state, isLoading) {
     state.isLoading = isLoading
   },
-  setOrderIsCreating(state, isCreating) {
+  setOrdersIsCreating(state, isCreating) {
     state.isCreating = isCreating
   },
   setOrderIsUpdating(state, isUpdating) {
