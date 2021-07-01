@@ -12,36 +12,46 @@
     <v-parallax v-if="store" :src="store.image" :height="220" />
     <v-container fluid v-if="store">
       <v-row>
-        <v-col> </v-col>
-      </v-row>
-      <v-row>
         <v-col>
           <h1>{{ store.name }}</h1>
         </v-col>
       </v-row>
       <v-row>
         <v-col sm="12" md="8">
-          <v-sheet class="overflow-y-auto" max-height="600">
-            <v-container>
-              <v-row>
-                <v-col
-                  v-for="(product, index) in store.products"
-                  :key="`product_${index}`"
-                  sm="12"
-                  md="6"
-                  lg="4"
-                >
-                  <product
-                    :product="product"
-                    @add-product="addProduct($event)"
-                  />
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-sheet>
+          <v-expansion-panels v-model="panels" multiple>
+            <v-expansion-panel
+              v-for="group in groupedProducts"
+              :key="`productGroup_${group.id}`"
+            >
+              <v-expansion-panel-header>
+                <h3 class="text-capitalize">
+                  {{ group.name }}
+                </h3></v-expansion-panel-header
+              >
+              <v-expansion-panel-content>
+                <v-container>
+                  <v-row>
+                    <v-col
+                      v-for="(product, index) in group.products"
+                      :key="`product_${index}`"
+                      sm="12"
+                      md="6"
+                      lg="4"
+                    >
+                      <product
+                        :product="product"
+                        @add-product="addProduct($event)"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-col>
         <v-col sm="12" md="4">
           <cart
+            class="sticky-card"
             :cart="cart"
             @remove-product="removeProduct($event)"
             @update-product="updateProduct($event)"
@@ -71,17 +81,37 @@ export default {
     },
   },
   async mounted() {
-    this.findStore(this.id)
+    await this.findStore(this.id)
+    this.panels = this.categories.map((e, index) => index)
   },
   data() {
     return {
       cart: [],
+      panels: [],
     }
   },
   computed: {
     ...mapGetters('stores', ['store', 'products', 'categories', 'isLoading']),
-    products() {
-      return this.store.products
+    groupedProducts() {
+      const res = this.categories
+        .map((baseCat) => ({
+          ...baseCat,
+          products: [],
+        }))
+        .sort((a, b) => a.order - b.order)
+      this.products.forEach((product) => {
+        product.categories.forEach((cat) => {
+          const refCat = res.find((resItem) => resItem.id === cat)
+          if (refCat) {
+            refCat.products.push(product)
+          } else {
+            console.error(
+              `Product of id ${product.id} has a category of id ${cat} that doesn't exist.`
+            )
+          }
+        })
+      })
+      return res
     },
   },
   methods: {
@@ -120,6 +150,9 @@ export default {
     getProductIndex(id) {
       return this.cart.findIndex((e) => e.id === id)
     },
+    productHasCategoryId(product, categoryId) {
+      return product.categories.includes(categoryId)
+    },
   },
 }
 </script>
@@ -130,5 +163,10 @@ export default {
   top: 15px;
   left: 15px;
   z-index: 2;
+}
+.sticky-card {
+  top: 100px;
+  position: sticky;
+  padding-right: 10%;
 }
 </style>

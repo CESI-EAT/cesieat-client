@@ -73,6 +73,36 @@ const routes = [
       import(/* webpackChunkName: "stripe" */ '../views/Stripe.vue'),
   },
   {
+    path: '/deliveryorders',
+    name: 'DeliveryOrders',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/DeliveryOrders.vue'),
+  },
+  {
+    path: '/deliveryhistory',
+    name: 'DeliveryHistory',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/DeliveryHistory.vue'),
+  },
+  {
+    path: '/storeorders',
+    name: 'StoreOrders',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/StoreOrders.vue'),
+  },
+  {
+    path: '/storehistory',
+    name: 'StoreHistory',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/StoreHistory.vue'),
+  },
+  {
+    path: '/userhistory',
+    name: 'UserHistory',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/UserHistory.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     component: () =>

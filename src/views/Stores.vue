@@ -122,7 +122,7 @@ export default {
   },
   data() {
     return {
-      searchString: '',
+      searchString: null,
       message: null,
       filter: {
         priceRange: 4,
@@ -137,7 +137,7 @@ export default {
   computed: {
     ...mapGetters('stores', ['stores', 'isLoading']),
     search() {
-      if (this.searchString && this.searchString.length > 0) {
+      if (this.searchString !== null) {
         return this.searchString
       } else if (this.searchProp && this.searchProp.length > 0) {
         return this.searchProp
