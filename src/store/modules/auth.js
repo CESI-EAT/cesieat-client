@@ -1,3 +1,4 @@
+import router from '../../router'
 import { request } from '../../utils/request'
 
 // initial state
@@ -67,8 +68,9 @@ const actions = {
   async register({ commit }, payload) {
     commit('setUserIsCreating', true)
     try {
-      const { data } = request.post(`register`, payload)
+      const { data } = await request.post('register', payload)
       commit('setUser', data.user)
+      router.push('/')
     } catch (err) {
       console.log(err)
     }

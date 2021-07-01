@@ -9,105 +9,8 @@
       ></v-progress-circular>
     </v-overlay>
     <v-app v-else>
-      <v-app-bar app color="primary">
-        <div class="d-flex justify-start">
-          <v-btn text color="transparent" @click="goToHome">
-            <v-img
-              alt="CESI'EAT Logo"
-              class="shrink mr-2"
-              contain
-              src="@/assets/cesieat_white_horizontal.png"
-              height="60"
-              position="left"
-            />
-          </v-btn>
-        </div>
-
-        <v-spacer></v-spacer>
-        <div v-if="$vuetify.breakpoint.mdAndUp">
-          <v-btn v-if="isLoggedIn" @click="goToOrders" text color="base">
-            <v-icon class="mr-2">mdi-clipboard-list</v-icon>
-            <span>Commandes</span>
-          </v-btn>
-          <v-btn v-if="isLoggedIn" to="/profile" text color="base">
-            <v-icon class="mr-2">mdi-account</v-icon>
-            <span>Profil</span>
-          </v-btn>
-          <v-btn v-if="isLoggedIn" @click="logout" text color="base">
-            <v-icon class="mr-2">mdi-logout</v-icon>
-            <span>Déconnexion</span>
-          </v-btn>
-          <v-btn v-else text @click="goToLoginPage" color="base">
-            <v-icon class="mr-2">mdi-login</v-icon>
-            <span>Connexion</span>
-          </v-btn>
-        </div>
-        <v-app-bar-nav-icon
-          color="white"
-          v-if="$vuetify.breakpoint.smAndDown"
-          @click="appBar = !appBar"
-        ></v-app-bar-nav-icon>
-      </v-app-bar>
-
+      <app-header></app-header>
       <v-main style="min-height: 100vh">
-        <v-row>
-          <v-col lg="10"></v-col>
-          <v-col lg="2">
-            <v-navigation-drawer
-              v-model="appBar"
-              v-if="$vuetify.breakpoint.smAndDown && appBar === true"
-              class="white text-right overflow-hidden"
-              absolute
-              permanent
-              right
-              color="grey lighten-2"
-            >
-              <v-list class="text-center">
-                <v-list-item
-                  v-if="!isLoggedIn"
-                  to="/login"
-                  link
-                  class="d-flex justify-center"
-                >
-                  <span>Connexion</span>
-
-                  <v-icon class="ml-2">mdi-login</v-icon>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item
-                  class="d-flex justify-center"
-                  v-if="isLoggedIn"
-                  link
-                  to="/profile"
-                >
-                  <span>Profil</span>
-                  <v-icon class="ml-2">mdi-account</v-icon>
-                </v-list-item>
-                <v-divider v-if="isLoggedIn"></v-divider>
-                <v-list-item
-                  class="d-flex justify-center"
-                  v-if="isLoggedIn"
-                  link
-                  to="/userhistory"
-                >
-                  <span>Commandes</span>
-                  <v-icon class="ml-2">mdi-clipboard-list</v-icon>
-                </v-list-item>
-                <v-divider v-if="isLoggedIn"></v-divider>
-                <v-list-item
-                  class="d-flex justify-center"
-                  v-if="isLoggedIn"
-                  link
-                  @click="logout"
-                >
-                  <span>Déconnexion</span>
-                  <v-icon class="ml-2">mdi-logout</v-icon>
-                </v-list-item>
-                <v-divider v-if="isLoggedIn"></v-divider>
-              </v-list>
-            </v-navigation-drawer>
-          </v-col>
-        </v-row>
         <router-view />
       </v-main>
 
@@ -139,21 +42,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Header from '@/components/Header.vue'
 
 export default {
   name: 'App',
+  components: { 'app-header': Header },
   computed: {
     ...mapGetters('auth', ['isLoggedIn', 'user', 'isLoading']),
   },
-  watch: {
-    $route(to, from) {
-      this.appBar = false
-    },
-  },
-  data: () => ({
-    appBar: false,
-    group: null,
-  }),
   created() {
     this.$store.dispatch('auth/getUser')
     console.log('API_URL', process.env, process.env.NODE_ENV)
@@ -177,11 +73,6 @@ export default {
     },
     goToRGPDPage() {
       this.$router.push('/gdpr')
-    },
-    showAppBar() {
-      console.log(this.appBar)
-      this.AppBar = true
-      console.log(this.appBar)
     },
   },
 }

@@ -1,9 +1,17 @@
 <template>
   <v-container fluid>
-    <v-row class="justify-center">
-      <v-col sm="8" md="8" lg="8" xl="8"
-        ><v-card class="mt-3" :loading="isLoading"
-          ><v-map :height="400"></v-map>
+    <v-row class="justify-center mt-2">
+      <v-col sm="8" md="8" lg="8" xl="8">
+        <v-card tile :loading="true">
+          <template slot="progress">
+            <v-progress-linear
+              color="primary"
+              height="10"
+              indeterminate
+            ></v-progress-linear>
+          </template>
+          <v-card-title>Suivi de votre commande</v-card-title>
+          <my-map :height="400"></my-map>
           <v-stepper v-model="currentStep" max-width="100%">
             <v-stepper-header>
               <v-stepper-step :complete="currentStep > 1" step="1">
@@ -29,71 +37,60 @@
           </v-stepper>
         </v-card>
       </v-col>
-      <v-col sm="2" md="2" lg="2" xl="2" class="justify-center"
-        ><v-card class="mt-3">
-          <div class="col-12 text-center pl-5">
-            <v-img
-              alt="CESI'EAT Logo"
-              class="shrink"
-              contain
-              src="@/assets/cesieat_no_image.png"
-              width="300"
-              height="100%"
+      <v-col sm="2" md="2" lg="2" xl="2" class="justify-center">
+        <v-card tile class="pb-2">
+          <v-img
+            alt="CESI'EAT Logo"
+            class="shrink"
+            contain
+            :src="order.madeBy.image || '@/assets/cesieat_no_image.png'"
+            height="100%"
+            width="300"
+          />
+          <v-card-title>{{ order.madeBy.name }}</v-card-title>
+          <v-card-text>
+            {{ order.madeBy.address }} à {{ order.madeBy.city }}
+          </v-card-text>
+          <v-card-actions>
+            <store-card-rating
+              :rating="order.madeBy.rating"
+              :ratingCount="order.madeBy.ratingCount"
             />
-          </div>
-          <div class="col-12 text-center">
-            <div>
-              <span>Livreur :</span>
-            </div>
-            <div>
-              <span>Milinkovitch</span>
-            </div>
-            <div>
-              <span>Julien</span>
-            </div>
-            <div>
-              <span>0675245698</span>
-            </div>
-            <div><span>2/5 </span><v-icon dense> mdi-star </v-icon></div>
-          </div>
+          </v-card-actions>
         </v-card>
-
-        <v-card class="mt-10 pb-2">
-          <div class="col-12 text-center pl-5">
-            <v-img
-              alt="CESI'EAT Logo"
-              class="shrink"
-              contain
-              src="@/assets/cesieat_no_image.png"
-              height="100%"
-              width="300"
+        <v-card tile class="pb-2" v-if="order.deliveredBy">
+          <v-img
+            alt="CESI'EAT Logo"
+            class="shrink"
+            contain
+            :src="order.deliveredBy.image || '@/assets/cesieat_no_image.png'"
+            height="100%"
+            width="300"
+          />
+          <v-card-title>{{ order.deliveredBy.name }}</v-card-title>
+          <v-card-text>
+            {{ order.deliveredBy.address }} à {{ order.deliveredBy.city }}
+          </v-card-text>
+          <v-card-actions>
+            <store-card-rating
+              :rating="order.deliveredBy.rating"
+              :ratingCount="order.deliveredBy.ratingCount"
             />
-          </div>
-          <div class="col-12 text-center">
-            <div>
-              <span>Restaurant :</span>
-            </div>
-            <div>
-              <span>Pizza Hut</span>
-            </div>
-            <div>
-              <span>225 Boulevard Godard</span>
-            </div>
-            <div><span>4/5 </span><v-icon dense> mdi-star </v-icon></div>
-          </div>
-        </v-card></v-col
-      >
+          </v-card-actions>
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import Map from '@/components/Map'
+import Map from '@/components/Map.vue'
+import StoreCardRating from '@/components/stores/StoreCardRating.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Follow',
-  components: { 'v-map': Map },
+  components: { 'my-map': Map, 'store-card-rating': StoreCardRating },
   props: {
     id: {
       type: String,
@@ -101,7 +98,7 @@ export default {
     },
   },
   async mounted() {
-    if (this.order === null) await this.findOrder(this.id)
+    this.findOrder(this.id)
   },
   computed: {
     ...mapGetters('orders', ['order', 'isLoading']),

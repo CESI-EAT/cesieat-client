@@ -100,7 +100,7 @@ export default {
     ...mapActions('orders', ['validCart']),
     async submitCart() {
       const payload = {
-        storeId: this.store._id,
+        madeBy: this.store._id,
         userId: this.user.id,
         products: this.cart,
         price: this.price,
