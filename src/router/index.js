@@ -7,8 +7,7 @@ import Register from '@/views/Register'
 import Follow from '@/views/Follow'
 import Payment from '@/views/Payment'
 import Profile from '@/views/Profile'
-import store from '@/store'
-import { Store } from 'vuex'
+import Checkout from '@/views/Checkout'
 
 Vue.use(VueRouter)
 
@@ -55,6 +54,14 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout,
     meta: {
       requiresAuth: true,
     },

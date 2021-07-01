@@ -1,11 +1,12 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col sm="5" md="5" lg="5" xl="5" class="justify-center">
+      <v-col sm="6" md="6" lg="4" xl="3" class="justify-center">
         <v-card class="mt-3 pa-4 mb-16 pb-10" width="600">
-          <div class="col-12">
-            <span class="font-weight-bold">BURGER KING</span>
-          </div>
+          <v-card-title class="font-weight-bold">BURGER KING</v-card-title>
+          <v-card-text>
+            <v-map></v-map>
+          </v-card-text>
           <iframe
             width="100%"
             height="300"
@@ -38,8 +39,8 @@
           </div>
         </v-card>
       </v-col>
-      <v-col sm="4" md="4" lg="4" xl="4" class="justify-center"
-        ><v-card class="mt-3 pa-4">
+      <v-col sm="6" md="6" lg="4" xl="3" class="justify-center">
+        <v-card class="mt-3 pa-4">
           <div>
             <div>
               <div class="row mt-1 pl-3 pb-2 justify-center">
@@ -99,11 +100,11 @@
 </template>
 
 <script>
-//import Map from '@/components/Map'
+import Map from '../components/Map.vue'
 
 export default {
   name: 'Payment',
-  //components: { Map },
+  components: { 'v-map': Map },
   methods: {},
   data: () => ({}),
 }
