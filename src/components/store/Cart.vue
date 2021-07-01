@@ -1,5 +1,5 @@
 <template>
-  <v-card tile :loading="isCartValidating" class="mx-auto">
+  <v-card tile :loading="isCartValidating" class="mx-auto pr-0">
     <template slot="progress">
       <v-progress-linear
         color="primary"
@@ -7,9 +7,61 @@
         indeterminate
       ></v-progress-linear>
     </template>
-    <v-card-title>Panier</v-card-title>
-    <v-card-subtitle>Wololo</v-card-subtitle>
-
+    <v-card-title><h3>Panier</h3></v-card-title>
+    <v-card-text>
+      <v-row
+        v-for="product in cart"
+        :key="'product_' + product.id"
+        class="flex-nowrap"
+      >
+        <v-col>
+          <v-card
+            color="White"
+            height="55"
+            width="100%"
+            class="ma-1 pl-2"
+            elevation="0"
+          >
+            <v-card-title
+              class="pa-1 pb-3 text-truncate"
+              style="display: inline-block"
+            >
+              - {{ product.name }}
+            </v-card-title>
+            <v-card-subtitle> - prix : {{ product.price }} € </v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col class="shrink">
+          <div class="d-flex">
+            <v-btn
+              class="ma-2"
+              max-width="25"
+              min-width="20"
+              @click="updateProduct(product.id, product.quantity - 1)"
+              ><v-icon>mdi-minus</v-icon></v-btn
+            >
+            <v-text-field
+              v-model="product.quantity"
+              solo
+              dense
+              readonly
+              reverse
+              style="width: 50px"
+              class="ma-2"
+            >
+            </v-text-field>
+            <v-btn
+              class="ma-2"
+              max-width="25"
+              min-width="20"
+              @click="updateProduct(product.id, product.quantity + 1)"
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </div>
+        </v-col>
+      </v-row>
+      <h2>Total : {{ price }} €</h2>
+    </v-card-text>
     <v-card-actions>
       <v-btn color="primary" block @click="submitCart">
         <v-icon class="mr-2">mdi-cart-check</v-icon>
@@ -21,6 +73,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Cart',
   props: {
@@ -33,6 +86,13 @@ export default {
     ...mapGetters('stores', ['store']),
     ...mapGetters('auth', ['user']),
     ...mapGetters('orders', ['isCartValidating']),
+    price() {
+      let sum = 0
+      this.cart.forEach((product) => {
+        sum += product.price * product.quantity
+      })
+      return sum
+    },
   },
   methods: {
     ...mapActions('orders', ['validCart']),
@@ -41,7 +101,7 @@ export default {
         storeId: this.store._id,
         userId: this.user.id,
         products: this.cart,
-        price: 22,
+        price: this.price,
       }
       await this.validCart(payload)
       this.$router.push('/payment')

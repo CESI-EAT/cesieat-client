@@ -33,21 +33,33 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: {
+      anonymous: true,
+    },
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
+    meta: {
+      anonymous: true,
+    },
   },
   {
     path: '/follow',
     name: 'Follow',
     component: Follow,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/payment',
     name: 'Payment',
     component: Payment,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/profile',
@@ -62,36 +74,45 @@ const routes = [
     name: 'DeliveryOrders',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/DeliveryOrders.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/deliveryhistory',
     name: 'DeliveryHistory',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/DeliveryHistory.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/storeorders',
     name: 'StoreOrders',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/StoreOrders.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/storehistory',
     name: 'StoreHistory',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/StoreHistory.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/userhistory',
     name: 'UserHistory',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/UserHistory.vue'),
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/conditions',
@@ -120,6 +141,13 @@ router.beforeEach((to, from, next) => {
     }
     next('/login')
   } else {
+    if (
+      Vue.$cookies.isKey('jwt') &&
+      to.matched.some((record) => record.meta.anonymous)
+    ) {
+      next('/')
+      return
+    }
     next()
   }
 })

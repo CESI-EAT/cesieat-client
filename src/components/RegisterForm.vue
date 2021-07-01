@@ -85,7 +85,17 @@
               @click:append="() => (showConfirmPassword = !showConfirmPassword)"
               :type="showConfirmPassword ? 'password' : 'text'"
             ></v-text-field>
-
+            <div class="pt-2">
+              <span class="subtitle-2"> Vous avez déjà un compte ? </span>
+              <v-btn
+                text
+                class="subtitle-2 pl-1"
+                color="primary"
+                @click="goToLogin"
+              >
+                Se connecter
+              </v-btn>
+            </div>
             <div class="pt-5">
               <v-btn @click="reset" color="grey" class="mr-4">
                 Rénitialiser
@@ -120,6 +130,9 @@ export default {
     },
     goToHome() {
       this.$router.push('/')
+    },
+    goToLogin() {
+      this.$router.push('/login')
     },
     async submit() {
       const payload = {
