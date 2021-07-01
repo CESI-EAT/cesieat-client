@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run switch:local && npm run lint && npm run serve",
-    "start": "npm run switch:kube && vue-cli-service serve",
+    "start": "npm run switch:kube && npm run lint && npm run serve",
     "serve": "vue-cli-service serve",
     "switch:kube": "ncp ./src/utils/kubeUrl.js ./src/utils/url.js",
     "switch:local": "ncp ./src/utils/localUrl.js ./src/utils/url.js",
