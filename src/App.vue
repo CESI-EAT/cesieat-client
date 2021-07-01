@@ -143,7 +143,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user']),
+    ...mapGetters('auth', ['isLoggedIn', 'user', 'isLoading']),
   },
   watch: {
     $route(to, from) {

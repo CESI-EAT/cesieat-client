@@ -9,15 +9,27 @@
       :cancel-url="cancelURL"
       @loading="(v) => (loading = v)"
     />
-    <v-btn @click="submit">Pay now!</v-btn>
+    <v-btn width="100%" color="primary" @click="submit">
+      <v-icon class="mr-2">mdi-cart-check</v-icon> Commander</v-btn
+    >
   </div>
 </template>
 
 <script>
 import { StripeCheckout } from '@vue-stripe/vue-stripe'
+import { mapGetters } from 'vuex'
 export default {
+  name: 'StripeButton',
   components: {
     StripeCheckout,
+  },
+  props: {
+    createOrder: {
+      type: Function,
+    },
+  },
+  computed: {
+    ...mapGetters('orders', ['order']),
   },
   data() {
     this.publishableKey =
@@ -35,9 +47,11 @@ export default {
     }
   },
   methods: {
-    submit() {
+    async submit() {
+      await this.createOrder()
+      this.$router(`/orders/${this.order._id}/follow`)
       // You will be redirected to Stripe's secure checkout page
-      this.$refs.checkoutRef.redirectToCheckout()
+      // this.$refs.checkoutRef.redirectToCheckout()
     },
   },
 }

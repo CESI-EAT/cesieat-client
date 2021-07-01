@@ -11,14 +11,14 @@
     </v-btn>
     <v-parallax v-if="store" :src="store.image" :height="220" />
     <v-container fluid v-if="store">
-      <v-row>
+      <v-row class="justify-center">
         <v-col>
           <h1>{{ store.name }}</h1>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col sm="12" md="8">
-          <v-expansion-panels v-model="panels" multiple>
+      <v-row class="justify-center">
+        <v-col sm="12" md="8" class="justify-center">
+          <v-expansion-panels v-model="panels" multiple tile outlined>
             <v-expansion-panel
               v-for="group in groupedProducts"
               :key="`productGroup_${group.id}`"
@@ -49,9 +49,9 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col>
-        <v-col sm="12" md="4">
+        <v-col sm="12" md="4" class="justify-center">
           <cart
-            class="sticky-card"
+            class="sticky-card pa-2"
             :cart="cart"
             @remove-product="removeProduct($event)"
             @update-product="updateProduct($event)"
@@ -165,8 +165,7 @@ export default {
   z-index: 2;
 }
 .sticky-card {
-  top: 100px;
+  top: 76px;
   position: sticky;
-  padding-right: 10%;
 }
 </style>

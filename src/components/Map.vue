@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container fluid class="pd-0">
     <iframe
       width="100%"
-      height="600"
+      :height="height"
       style="border: 0"
       loading="lazy"
       allowfullscreen
@@ -19,6 +19,12 @@
 <script>
 export default {
   name: 'Map',
+  props: {
+    height: {
+      type: Number,
+      default: 600,
+    },
+  },
   methods: {},
   data: () => ({}),
 }

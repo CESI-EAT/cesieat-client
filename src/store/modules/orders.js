@@ -4,18 +4,22 @@ import { request } from '../../utils/request'
 const state = () => ({
   orders: [],
   order: null,
+  cart: null,
   isLoading: false,
   isUpdating: false,
   isCreating: false,
+  isCartValidating: false,
 })
 
 // getters
 const getters = {
   orders: (state) => state.orders,
   order: (state) => state.order,
+  cart: (state) => state.cart,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
   isCreating: (state) => state.isCreating,
+  isCartValidating: (state) => state.isCartValidating,
 }
 
 // actions
@@ -53,22 +57,22 @@ const actions = {
     commit('setOrdersIsUpdating', false)
   },
 
-  async createOrder({ commit, state }, payload) {
+  async createOrder({ commit }, payload) {
     commit('setOrdersIsCreating', true)
     try {
       const res = await request.post(`orders`, payload)
-      commit('setOrders', res.data.orders)
+      commit('addOrder', res.data.order)
     } catch (err) {
       console.log(err)
     }
     commit('setOrdersIsCreating', false)
   },
 
-  async findOrder({ commit, state }, orderId) {
+  async findOrder({ commit }, orderId) {
     commit('setOrdersIsLoading', true)
     try {
       const { data: order } = await request.get(`orders/${orderId}`)
-      commit('setCurrentOrder', order)
+      commit('setOrder', order)
     } catch (err) {
       console.log(err)
     }
@@ -99,6 +103,17 @@ const actions = {
     }
     commit('setOrdersIsDeleting', false)
   },
+
+  async validCart({ commit }, payload) {
+    commit('setCartIsLoading', true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      commit('setCart', payload)
+    } catch (err) {
+      console.log(err)
+    }
+    commit('setCartIsLoading', false)
+  },
 }
 
 // mutations
@@ -118,13 +133,16 @@ const mutations = {
   setOrders(state, orders) {
     state.orders = orders
   },
-  setOrder(state, orders) {
-    state.orders = orders
+  setOrder(state, order) {
+    state.order = order
   },
-  setOrderIsLoading(state, isLoading) {
+  setCart(state, cart) {
+    state.cart = cart
+  },
+  setOrdersIsLoading(state, isLoading) {
     state.isLoading = isLoading
   },
-  setOrderIsCreating(state, isCreating) {
+  setOrdersIsCreating(state, isCreating) {
     state.isCreating = isCreating
   },
   setOrderIsUpdating(state, isUpdating) {
@@ -132,6 +150,9 @@ const mutations = {
   },
   setOrderDeleting(state, isDeleting) {
     state.isDeleting = isDeleting
+  },
+  setCartIsLoading(state, isCartValidating) {
+    state.isCartValidating = isCartValidating
   },
 }
 

@@ -1,5 +1,12 @@
 <template>
-  <v-card class="pr-0">
+  <v-card tile :loading="isCartValidating" class="mx-auto pr-0">
+    <template slot="progress">
+      <v-progress-linear
+        color="primary"
+        height="10"
+        indeterminate
+      ></v-progress-linear>
+    </template>
     <v-card-title><h3>Panier</h3></v-card-title>
     <v-card-text>
       <v-row
@@ -21,7 +28,9 @@
             >
               - {{ product.name }}
             </v-card-title>
-            <v-card-subtitle> - prix : {{ product.price }} € </v-card-subtitle>
+            <v-card-subtitle>
+              Prix : {{ product.price.toFixed(2) }} €
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col class="shrink">
@@ -53,10 +62,10 @@
           </div>
         </v-col>
       </v-row>
-      <h2>Total : {{ total }} €</h2>
+      <h2>Total : {{ price.toFixed(2) }} €</h2>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" block>
+      <v-btn color="primary" block @click="submitCart">
         <v-icon class="mr-2">mdi-cart-check</v-icon>
         Commander
       </v-btn>
@@ -65,6 +74,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Cart',
   props: {
@@ -74,7 +85,10 @@ export default {
     },
   },
   computed: {
-    total() {
+    ...mapGetters('stores', ['store']),
+    ...mapGetters('auth', ['user']),
+    ...mapGetters('orders', ['isCartValidating']),
+    price() {
       let sum = 0
       this.cart.forEach((product) => {
         sum += product.price * product.quantity
@@ -83,6 +97,17 @@ export default {
     },
   },
   methods: {
+    ...mapActions('orders', ['validCart']),
+    async submitCart() {
+      const payload = {
+        storeId: this.store._id,
+        userId: this.user.id,
+        products: this.cart,
+        price: this.price,
+      }
+      await this.validCart(payload)
+      this.$router.push('/payment')
+    },
     removeProduct(id) {
       this.$emit('remove-product', id)
     },

@@ -7,8 +7,6 @@ import Register from '@/views/Register'
 import Follow from '@/views/Follow'
 import Payment from '@/views/Payment'
 import Profile from '@/views/Profile'
-import store from '@/store'
-import { Store } from 'vuex'
 
 Vue.use(VueRouter)
 
@@ -48,12 +46,13 @@ const routes = [
     },
   },
   {
-    path: '/follow',
+    path: '/orders/:id/follow',
     name: 'Follow',
     component: Follow,
     meta: {
       requiresAuth: true,
     },
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: '/payment',
@@ -67,15 +66,6 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: '/stripe',
-    name: 'Stripe',
-    component: () =>
-      import(/* webpackChunkName: "stripe" */ '../views/Stripe.vue'),
     meta: {
       requiresAuth: true,
     },
