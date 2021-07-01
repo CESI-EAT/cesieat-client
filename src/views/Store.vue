@@ -12,36 +12,29 @@
     <v-parallax v-if="store" :src="store.image" :height="220" />
     <v-container fluid v-if="store">
       <v-row>
-        <v-col> </v-col>
-      </v-row>
-      <v-row>
         <v-col>
           <h1>{{ store.name }}</h1>
         </v-col>
       </v-row>
       <v-row>
         <v-col sm="12" md="8">
-          <v-sheet class="overflow-y-auto" max-height="600">
-            <v-container>
-              <v-row>
-                <v-col
-                  v-for="(product, index) in store.products"
-                  :key="`product_${index}`"
-                  sm="12"
-                  md="6"
-                  lg="4"
-                >
-                  <product
-                    :product="product"
-                    @add-product="addProduct($event)"
-                  />
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-sheet>
+          <v-container>
+            <v-row>
+              <v-col
+                v-for="(product, index) in store.products"
+                :key="`product_${index}`"
+                sm="12"
+                md="6"
+                lg="4"
+              >
+                <product :product="product" @add-product="addProduct($event)" />
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
         <v-col sm="12" md="4">
           <cart
+            class="sticky-card"
             :cart="cart"
             @remove-product="removeProduct($event)"
             @update-product="updateProduct($event)"
@@ -130,5 +123,10 @@ export default {
   top: 15px;
   left: 15px;
   z-index: 2;
+}
+.sticky-card {
+  top: 100px;
+  position: sticky;
+  padding-right: 10%;
 }
 </style>
