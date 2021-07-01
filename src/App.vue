@@ -77,6 +77,7 @@ export default {
   },
   created() {
     this.$store.dispatch('auth/getUser')
+    console.log(process.env.API_URL)
   },
   methods: {
     goToLoginPage() {
