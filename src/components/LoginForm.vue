@@ -99,6 +99,7 @@ export default {
         .catch(() => this.wrongCredentials())
       if (res && res.data && res.data.success) {
         this.$store.dispatch('auth/getUser')
+        this.$store.dispatch('socket/connect')
         this.goToHome()
       } else {
         console.log('mauvais mdp')

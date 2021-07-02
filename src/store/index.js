@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './modules/auth'
 import stores from './modules/stores'
 import orders from './modules/orders'
+import socket from './modules/socket'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     auth,
     stores,
     orders,
+    socket,
   },
   strict: debug,
 })

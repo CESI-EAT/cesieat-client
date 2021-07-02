@@ -33,10 +33,12 @@ const actions = {
     commit('setUserIsLoading', false)
   },
 
-  async logout({ commit }) {
+  async logout({ commit, dispatch }) {
     commit('setUserIsLoading', true)
+
     try {
       await request.post('logout')
+      dispatch('socket/disconnect')
       commit('setUser', null)
     } catch (err) {
       console.log(err)

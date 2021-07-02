@@ -64,7 +64,11 @@
           :loading="isCreating"
           tile
           class="mx-auto pa-2"
-          style="background-color: rgb(246, 246, 246); position: sticky; top: 76px;"
+          style="
+            background-color: rgb(246, 246, 246);
+            position: sticky;
+            top: 76px;
+          "
         >
           <template slot="progress">
             <v-progress-linear

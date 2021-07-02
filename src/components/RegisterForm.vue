@@ -14,15 +14,9 @@
           <v-spacer></v-spacer>
           <span> S'inscrire en tant que : </span>
           <v-btn-toggle v-model="status">
-            <v-btn class="ml-16" value="Consommateur">
-              Client
-            </v-btn>
-            <v-btn value="Livreur">
-              Livreur
-            </v-btn>
-            <v-btn value="Restaurateur">
-              Restaurateur
-            </v-btn>
+            <v-btn class="ml-16" value="Consommateur"> Client </v-btn>
+            <v-btn value="Livreur"> Livreur </v-btn>
+            <v-btn value="Restaurateur"> Restaurateur </v-btn>
           </v-btn-toggle>
 
           <form @submit.prevent="submit">

@@ -27,12 +27,7 @@
           <v-icon class="mr-2">mdi-account</v-icon>
           <span>Gérer mon profil</span>
         </v-btn>
-        <v-btn
-          v-if="isLoggedIn"
-          text
-          color="base"
-          style="pointer-events: none;"
-        >
+        <v-btn v-if="isLoggedIn" text color="base" style="pointer-events: none">
           <span>{{ user.firstname }} {{ user.lastname }}</span>
         </v-btn>
         <v-btn v-if="isLoggedIn" @click="logout" text color="base">
@@ -55,7 +50,7 @@
           v-if="isLoggedIn"
           active-class="primary--text text--accent-4"
         >
-          <v-list-item style="pointer-events: none;">
+          <v-list-item style="pointer-events: none">
             <v-list-item-title class="text-h6"
               >{{ user.firstname }} {{ user.lastname }}</v-list-item-title
             >
