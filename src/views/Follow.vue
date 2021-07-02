@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row class="justify-center mt-2">
       <v-col sm="8" md="8" lg="8" xl="8">
-        <v-card tile :loading="true">
+        <v-card tile :loading="!order || order.status !== 'DELIVERED'">
           <template slot="progress">
             <v-progress-linear
               color="primary"
@@ -36,9 +36,12 @@
             </v-stepper-header>
           </v-stepper>
         </v-card>
+        <v-card class="mt-4 pb-2">
+          <v-card-title>Résumé de la commande</v-card-title>
+        </v-card>
       </v-col>
       <v-col sm="2" md="2" lg="2" xl="2" class="justify-center">
-        <v-card tile class="pb-2">
+        <v-card tile class="pb-2" v-if="order && order.madeBy">
           <v-img
             alt="CESI'EAT Logo"
             class="shrink"
@@ -58,24 +61,47 @@
             />
           </v-card-actions>
         </v-card>
-        <v-card tile class="pb-2" v-if="order.deliveredBy">
-          <v-img
-            alt="CESI'EAT Logo"
-            class="shrink"
-            contain
-            :src="order.deliveredBy.image || '@/assets/cesieat_no_image.png'"
-            height="100%"
-            width="300"
-          />
-          <v-card-title>{{ order.deliveredBy.name }}</v-card-title>
+        <v-card tile class="mt-4 pb-2" v-if="order && order.deliveredBy">
+          <v-card-title>Votre livreur</v-card-title>
+          <v-divider class="mx-4"></v-divider>
+          <v-card-title>
+            {{ order.deliveredBy.firstname }} {{ order.deliveredBy.lastname }}
+          </v-card-title>
           <v-card-text>
-            {{ order.deliveredBy.address }} à {{ order.deliveredBy.city }}
+            Vous pouvez le joindre par téléphone au
+            <strong>{{ order.deliveredBy.phoneNum }}</strong>
+          </v-card-text>
+        </v-card>
+        <v-card
+          tile
+          class="mt-4 pb-2"
+          v-if="
+            order &&
+              order.madeBy &&
+              ((user.id === order.madeBy.userId &&
+                order.status === 'ACCEPTED') ||
+                (order.status === 'DELIVERY' &&
+                  user.id === order.deliveredBy.id))
+          "
+        >
+          <v-card-title>Action en attente</v-card-title>
+          <v-divider class="mx-4"></v-divider>
+          <v-card-text>
+            {{
+              order.status === 'ACCEPTED'
+                ? 'Confirmation de la préparation de la commande'
+                : 'Confirmation de la livraison de la commande'
+            }}
           </v-card-text>
           <v-card-actions>
-            <store-card-rating
-              :rating="order.deliveredBy.rating"
-              :ratingCount="order.deliveredBy.ratingCount"
-            />
+            <v-btn
+              color="primary"
+              @click="validate(order._id)"
+              block
+              :loading="isUpdating"
+            >
+              Valider
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -101,7 +127,8 @@ export default {
     this.findOrder(this.id)
   },
   computed: {
-    ...mapGetters('orders', ['order', 'isLoading']),
+    ...mapGetters('orders', ['order', 'isLoading', 'isUpdating']),
+    ...mapGetters('auth', ['user']),
     currentStep() {
       return this.order
         ? this.steps.findIndex((s) => s === this.order.status) + 1
@@ -109,7 +136,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('orders', ['findOrder']),
+    ...mapActions('orders', ['findOrder', 'validate']),
   },
   data: () => ({
     steps: ['REQUESTED', 'ACCEPTED', 'PREPARED', 'DELIVERY', 'DELIVERED'],

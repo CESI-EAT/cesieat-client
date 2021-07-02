@@ -1,5 +1,5 @@
 <template>
-  <v-card tile :loading="isCartValidating" class="mx-auto pr-0">
+  <v-card tile :loading="isCartValidating">
     <template slot="progress">
       <v-progress-linear
         color="primary"

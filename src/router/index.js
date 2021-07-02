@@ -7,6 +7,8 @@ import Register from '@/views/Register'
 import Follow from '@/views/Follow'
 import Payment from '@/views/Payment'
 import Profile from '@/views/Profile'
+import Orders from '@/views/Orders'
+import History from '@/views/History'
 
 Vue.use(VueRouter)
 
@@ -71,46 +73,17 @@ const routes = [
     },
   },
   {
-    path: '/deliveryorders',
-    name: 'DeliveryOrders',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/DeliveryOrders.vue'),
+    path: '/orders',
+    name: 'Orders',
+    component: Orders,
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/deliveryhistory',
-    name: 'DeliveryHistory',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/DeliveryHistory.vue'),
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: '/storeorders',
-    name: 'StoreOrders',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/StoreOrders.vue'),
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: '/storehistory',
-    name: 'StoreHistory',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/StoreHistory.vue'),
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: '/userhistory',
-    name: 'UserHistory',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/UserHistory.vue'),
+    path: '/history',
+    name: 'history',
+    component: History,
     meta: {
       requiresAuth: true,
     },
