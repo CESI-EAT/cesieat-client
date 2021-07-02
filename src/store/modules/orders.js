@@ -42,7 +42,7 @@ const actions = {
       const { data: order } = await request.get('myorder')
       commit('setOrder', order)
     } catch (err) {
-      console.log(err)
+      commit('setOrder', null)
     }
   },
   async loadHistory({ commit }, userId) {
@@ -112,7 +112,9 @@ const actions = {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       const { data } = await request.post(`/orders/${orderId}/validate`)
       commit('setOrder', data.order)
-      console.log('order: ', data.order)
+      if (data.status === 'DELIVERED') {
+        router.push(`/history`)
+      }
       router.push(`/orders/${orderId}/follow`)
     } catch (err) {
       console.log(err)

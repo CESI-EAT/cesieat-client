@@ -36,8 +36,78 @@
             </v-stepper-header>
           </v-stepper>
         </v-card>
-        <v-card class="mt-4 pb-2">
+        <v-card class="mt-4 pb-2" v-if="order !== null">
           <v-card-title>Résumé de la commande</v-card-title>
+          <v-divider class="mx-4"></v-divider>
+          <v-card-text>
+            <v-list class="transparent">
+              <v-list-item class="pd-0">
+                <v-list-item-content class="text-subtitle-1"
+                  >Estimation du temps</v-list-item-content
+                >
+                <v-list-item-action>
+                  <strong> {{ order.deliverTime }}</strong></v-list-item-action
+                >
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content class="text-subtitle-1"
+                  >Adresse</v-list-item-content
+                >
+                <v-list-item-action>
+                  <strong>
+                    {{ order.deliveryAddress }}</strong
+                  ></v-list-item-action
+                >
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content class="text-subtitle-1"
+                  >Ville</v-list-item-content
+                >
+                <v-list-item-action>
+                  <strong>Bordeaux</strong></v-list-item-action
+                >
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content class="text-subtitle-1"
+                  >Mode de livraison</v-list-item-content
+                >
+                <v-list-item-action>
+                  <strong>
+                    {{ order.interactionType }}</strong
+                  ></v-list-item-action
+                >
+              </v-list-item>
+              <v-list-item v-if="order.specialInstructions">
+                <v-list-item-content class="text-subtitle-1"
+                  >Instructions de livraison</v-list-item-content
+                >
+                <v-list-item-action>
+                  <strong>
+                    {{ order.specialInstructions }}</strong
+                  ></v-list-item-action
+                >
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-divider class="mx-4"></v-divider>
+          <v-divider class="mx-4"></v-divider>
+          <v-card-title>Vos articles :</v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item
+                v-for="product in order.products"
+                :key="'product_' + product.id"
+              >
+                <v-list-item-content class="text-subtitle-1"
+                  ><strong>{{ product.name }}</strong>
+                  {{ product.price.toFixed(2) }} €</v-list-item-content
+                >
+                <v-list-item-action class="text-h5">
+                  x {{ product.quantity }}</v-list-item-action
+                >
+              </v-list-item>
+            </v-list>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col sm="2" md="2" lg="2" xl="2" class="justify-center">

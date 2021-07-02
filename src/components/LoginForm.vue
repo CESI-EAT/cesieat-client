@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="800" tile>
+  <v-card class="mx-auto" max-width="800" tile :loading="isLoading">
     <div class="pa-5">
       <v-form ref="form" lazy-validation v-if="status === 0">
         <span class="title"> Connectez-vous : </span>
@@ -36,7 +36,12 @@
             </v-btn>
           </div>
           <div class="pt-5">
-            <v-btn class="mr-2" type="submit" color="primary">
+            <v-btn
+              class="mr-2"
+              type="submit"
+              color="primary"
+              :loading="isLoading"
+            >
               Connexion
             </v-btn>
             <v-btn class="ma-2" text color="primary" @click="status = -1">
@@ -78,11 +83,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { request } from '../utils/request'
 
 export default {
   name: 'LoginForm',
+  computed: {
+    ...mapGetters('auth', 'isLoading'),
+  },
   methods: {
     reset() {
       this.$refs.form.reset()
