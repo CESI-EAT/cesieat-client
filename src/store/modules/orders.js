@@ -36,7 +36,7 @@ const actions = {
     commit('setOrdersIsLoading', false)
   },
 
-  async findMyOrders({ commit }, userId) {
+  async loadHistory({ commit }, userId) {
     commit('setOrdersIsLoading', true)
     try {
       const { data: orders } = await request.get(`users/${userId}/orders`)
@@ -45,17 +45,6 @@ const actions = {
       console.log(err)
     }
     commit('setOrdersIsLoading', false)
-  },
-
-  async validate({ commit, state }) {
-    commit('setOrdersIsUpdating', true)
-    try {
-      const res = await request.post(`orders/${state.currentOrder.id}/validate`)
-      commit('updateOrder', res.data.order)
-    } catch (err) {
-      console.log(err)
-    }
-    commit('setOrdersIsUpdating', false)
   },
 
   async createOrder({ commit }, payload) {
@@ -108,6 +97,20 @@ const actions = {
     commit('setOrdersIsDeleting', false)
   },
 
+  async validate({ commit }, orderId) {
+    commit('setOrdersIsUpdating', true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const { data } = await request.post(`/orders/${orderId}/validate`)
+      commit('setOrder', data.order)
+      console.log('order: ', data.order)
+      router.push(`/orders/${orderId}/follow`)
+    } catch (err) {
+      console.log(err)
+    }
+    commit('setOrdersIsUpdating', false)
+  },
+
   async validCart({ commit }, payload) {
     commit('setCartIsLoading', true)
     try {
@@ -150,7 +153,7 @@ const mutations = {
   setOrdersIsCreating(state, isCreating) {
     state.isCreating = isCreating
   },
-  setOrderIsUpdating(state, isUpdating) {
+  setOrdersIsUpdating(state, isUpdating) {
     state.isUpdating = isUpdating
   },
   setOrderDeleting(state, isDeleting) {

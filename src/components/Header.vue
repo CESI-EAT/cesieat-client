@@ -19,6 +19,10 @@
       ></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
+        <v-btn v-if="isLoggedIn" to="/history" text color="base">
+          <v-icon class="mr-2">mdi-clipboard-list</v-icon>
+          <span>Historique des commandes</span>
+        </v-btn>
         <v-btn v-if="isLoggedIn" to="/orders" text color="base">
           <v-icon class="mr-2">mdi-clipboard-list</v-icon>
           <span>Mes commandes</span>
