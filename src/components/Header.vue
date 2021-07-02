@@ -37,7 +37,7 @@
           <span>Mes commandes en cours</span>
         </v-btn>
         <v-btn
-          v-else-if="hasOrderInProgress"
+          v-else-if="isLoggedIn && hasOrderInProgress"
           :to="`/orders/${order._id}/follow`"
           text
           color="base"
