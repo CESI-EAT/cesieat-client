@@ -23,10 +23,29 @@
           <v-icon class="mr-2">mdi-clipboard-list</v-icon>
           <span>Historique des commandes</span>
         </v-btn>
-        <v-btn v-if="isLoggedIn" to="/orders" text color="base">
+        <v-btn
+          v-if="
+            isLoggedIn &&
+              (user.role.name === 'Restaurateur' ||
+                (user.role.name === 'Livreur' && !hasOrderInProgress))
+          "
+          to="/orders"
+          text
+          color="base"
+        >
           <v-icon class="mr-2">mdi-clipboard-list</v-icon>
-          <span>Mes commandes</span>
+          <span>Mes commandes en cours</span>
         </v-btn>
+        <v-btn
+          v-else-if="hasOrderInProgress"
+          :to="`/orders/${order._id}/follow`"
+          text
+          color="base"
+        >
+          <v-icon class="mr-2">mdi-clipboard-list</v-icon>
+          <span>Ma commande en cours</span>
+        </v-btn>
+
         <v-btn v-if="isLoggedIn" to="/profile" text color="base">
           <v-icon class="mr-2">mdi-account</v-icon>
           <span>Gérer mon profil</span>
@@ -121,6 +140,7 @@ export default {
   name: 'Header',
   computed: {
     ...mapGetters('auth', ['isLoggedIn', 'user', 'isLoading']),
+    ...mapGetters('orders', ['hasOrderInProgress', 'order']),
   },
   watch: {
     $route(to, from) {

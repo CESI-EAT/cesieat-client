@@ -22,11 +22,14 @@ const getters = {
 
 // actions
 const actions = {
-  async getUser({ commit }) {
+  async getUser({ commit, dispatch }) {
     commit('setUserIsLoading', true)
     try {
       const res = await request.get('me')
       commit('setUser', res.data)
+      if (res.data) {
+        dispatch('orders/getCurrentOrder', {}, { root: true })
+      }
     } catch (err) {
       commit('setUser', null)
     }

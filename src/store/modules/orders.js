@@ -16,6 +16,7 @@ const state = () => ({
 const getters = {
   orders: (state) => state.orders,
   order: (state) => state.order,
+  hasOrderInProgress: (state) => state.order !== null,
   cart: (state) => state.cart,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
@@ -36,6 +37,14 @@ const actions = {
     commit('setOrdersIsLoading', false)
   },
 
+  async getCurrentOrder({ commit }) {
+    try {
+      const { data: order } = await request.get('myorder')
+      commit('setOrder', order)
+    } catch (err) {
+      console.log(err)
+    }
+  },
   async loadHistory({ commit }, userId) {
     commit('setOrdersIsLoading', true)
     try {

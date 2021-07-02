@@ -8,9 +8,8 @@
       allowfullscreen
       src="https://www.google.com/maps/embed/v1/directions
   ?key=AIzaSyDxlv2xjtDEbsOXK_ncWeqjvgI62N6PPu4
-  &origin=14+bis+rue+fringon
-  &destination=bayonne
-  &avoid=tolls|highways"
+  &origin=264+Boulevard+Godard
+  &destination=83+Quai+des+Chartrons"
     >
     </iframe>
   </v-container>
