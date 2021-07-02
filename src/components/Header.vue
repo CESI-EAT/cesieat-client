@@ -56,7 +56,7 @@
           color="base"
           style="pointer-events: none;"
         >
-          <span>{{ user.firstname }} {{ user.lastname }}</span>
+          <span>Bonjour {{ user.firstname }} {{ user.lastname }}</span>
         </v-btn>
         <v-btn v-if="isLoggedIn" @click="logout" text color="base">
           <v-icon class="mr-2">mdi-logout</v-icon>
