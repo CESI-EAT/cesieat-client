@@ -4,6 +4,7 @@ import { request } from '../../utils/request'
 // initial state
 const state = () => ({
   user: null,
+  myorder: null,
   isLoading: false,
   isUpdating: false,
   isCreating: false,
@@ -14,6 +15,7 @@ const state = () => ({
 const getters = {
   isLoggedIn: (state) => !!state.user,
   user: (state) => state.user,
+  myorder: (state) => state.myorder,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
   isCreating: (state) => state.isCreating,
@@ -28,12 +30,20 @@ const actions = {
       const res = await request.get('me')
       commit('setUser', res.data)
       if (res.data) {
-        dispatch('orders/getCurrentOrder', {}, { root: true })
+        await dispatch('getCurrentOrder')
       }
     } catch (err) {
       commit('setUser', null)
     }
     commit('setUserIsLoading', false)
+  },
+  async getCurrentOrder({ commit }) {
+    try {
+      const { data: order } = await request.get('myorder')
+      commit('setMyOrder', order)
+    } catch (err) {
+      commit('setMyOrder', null)
+    }
   },
 
   async logout({ commit }) {
@@ -85,6 +95,9 @@ const actions = {
 const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setMyOrder(state, myorder) {
+    state.myorder = myorder
   },
   setUserIsLoading(state, isLoading) {
     state.isLoading = isLoading

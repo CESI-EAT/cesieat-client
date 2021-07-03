@@ -65,9 +65,13 @@
       <h2>Total : {{ price.toFixed(2) }} €</h2>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" block @click="submitCart">
+      <v-btn color="primary" block @click="submitCart" v-if="isLoggedIn">
         <v-icon class="mr-2">mdi-cart-check</v-icon>
         Commander
+      </v-btn>
+      <v-btn color="primary" block to="/login" v-else>
+        <v-icon class="mr-2">mdi-login</v-icon>
+        Se connecter
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -86,7 +90,7 @@ export default {
   },
   computed: {
     ...mapGetters('stores', ['store']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user', 'isLoggedIn']),
     ...mapGetters('orders', ['isCartValidating']),
     price() {
       let sum = 0

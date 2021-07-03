@@ -36,15 +36,6 @@ const actions = {
     }
     commit('setOrdersIsLoading', false)
   },
-
-  async getCurrentOrder({ commit }) {
-    try {
-      const { data: order } = await request.get('myorder')
-      commit('setOrder', order)
-    } catch (err) {
-      commit('setOrder', null)
-    }
-  },
   async loadHistory({ commit }, userId) {
     commit('setOrdersIsLoading', true)
     try {

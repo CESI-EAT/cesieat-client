@@ -89,7 +89,12 @@ import { request } from '../utils/request'
 export default {
   name: 'LoginForm',
   computed: {
-    ...mapGetters('auth', 'isLoading'),
+    ...mapGetters('auth', ['isLoading']),
+  },
+  props: {
+    from: {
+      type: Object,
+    },
   },
   methods: {
     reset() {
@@ -107,7 +112,8 @@ export default {
         .catch(() => this.wrongCredentials())
       if (res && res.data && res.data.success) {
         this.$store.dispatch('auth/getUser')
-        this.goToHome()
+        if (this.from) this.$router.push(this.from.path)
+        else this.goToHome()
       } else {
         console.log('mauvais mdp')
       }
