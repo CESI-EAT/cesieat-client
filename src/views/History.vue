@@ -44,6 +44,7 @@
               </v-card-actions>
             </v-app-bar>
           </v-img>
+          <v-card-subtitle>{{ order.createdAt | formatDate }}</v-card-subtitle>
           <v-row>
             <v-col cols="6">
               <v-card-title class="headline"

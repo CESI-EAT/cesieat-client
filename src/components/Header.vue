@@ -38,7 +38,7 @@
         </v-btn>
         <v-btn
           v-else-if="isLoggedIn && hasOrderInProgress"
-          :to="`/orders/${order._id}/follow`"
+          :to="`/orders/${myorder._id}/follow`"
           text
           color="base"
         >
@@ -139,8 +139,13 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Header',
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user', 'isLoading']),
-    ...mapGetters('orders', ['hasOrderInProgress', 'order']),
+    ...mapGetters('auth', [
+      'isLoggedIn',
+      'user',
+      'isLoading',
+      'myorder',
+      'hasOrderInProgress',
+    ]),
   },
   watch: {
     $route(to, from) {

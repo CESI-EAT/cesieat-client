@@ -16,6 +16,7 @@ const getters = {
   isLoggedIn: (state) => !!state.user,
   user: (state) => state.user,
   myorder: (state) => state.myorder,
+  hasOrderInProgress: (state) => state.myorder !== null,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
   isCreating: (state) => state.isCreating,
@@ -37,6 +38,7 @@ const actions = {
     }
     commit('setUserIsLoading', false)
   },
+
   async getCurrentOrder({ commit }) {
     try {
       const { data: order } = await request.get('myorder')

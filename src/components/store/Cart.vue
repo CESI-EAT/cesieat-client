@@ -65,9 +65,23 @@
       <h2>Total : {{ price.toFixed(2) }} €</h2>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" block @click="submitCart" v-if="isLoggedIn">
+      <v-btn
+        color="primary"
+        block
+        @click="submitCart"
+        v-if="isLoggedIn && !hasOrderInProgress"
+      >
         <v-icon class="mr-2">mdi-cart-check</v-icon>
         Commander
+      </v-btn>
+      <v-btn
+        color="primary"
+        block
+        :to="`/orders/${myorder._id}/follow`"
+        v-else-if="isLoggedIn && hasOrderInProgress"
+      >
+        <v-icon class="mr-2">mdi-eye</v-icon>
+        Voir ma commande en cours
       </v-btn>
       <v-btn color="primary" block to="/login" v-else>
         <v-icon class="mr-2">mdi-login</v-icon>
@@ -90,7 +104,12 @@ export default {
   },
   computed: {
     ...mapGetters('stores', ['store']),
-    ...mapGetters('auth', ['user', 'isLoggedIn']),
+    ...mapGetters('auth', [
+      'user',
+      'isLoggedIn',
+      'hasOrderInProgress',
+      'myorder',
+    ]),
     ...mapGetters('orders', ['isCartValidating']),
     price() {
       let sum = 0

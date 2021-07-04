@@ -16,7 +16,6 @@ const state = () => ({
 const getters = {
   orders: (state) => state.orders,
   order: (state) => state.order,
-  hasOrderInProgress: (state) => state.order !== null,
   cart: (state) => state.cart,
   isLoading: (state) => state.isLoading,
   isUpdating: (state) => state.isUpdating,
@@ -53,7 +52,7 @@ const actions = {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       const res = await request.post(`orders`, payload)
       commit('addOrder', res.data)
-      commit('setOrdersIsCreating', false)
+      commit('auth/setMyOrder', res.data, { root: true })
       router.push(`/orders/${res.data._id}/follow`)
     } catch (err) {
       console.log(err)
